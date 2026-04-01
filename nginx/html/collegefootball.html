@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0J8DVETW8G"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-0J8DVETW8G');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Football - Cheesy Sports</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #555;
+            margin-top: 30px;
+        }
+        .team-link {
+            display: inline-block;
+            margin: 15px;
+            padding: 12px 25px;
+            font-size: 16px;
+            color: white;
+            background-color: #2196f3;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .team-link:hover {
+            background-color: #0b7dda;
+            transform: translateY(-2px);
+        }
+        .search-container {
+            margin: 20px auto; /* Reduced from 30px to bring them closer */
+            max-width: 500px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .search-input {
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            width: 70%;
+        }
+        .search-button {
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-button:hover {
+            background-color: #e64a19;
+        }
+        .nav-button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+        .back-button {
+            background-color: #666;
+        }
+        .back-button:hover {
+            background-color: #555;
+        }
+        .home-button {
+            background-color: #4caf50;
+        }
+        .home-button:hover {
+            background-color: #3e8e41;
+        }
+        .featured-teams {
+            margin: 30px auto;
+            max-width: 600px;
+        }
+        .page-footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 3rem;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <a href="sports.html" class="nav-button back-button">← Back to Sports</a>
+        <a href="../cheesyhome.html" class="nav-button home-button">Cheesyman Home</a>
+    </div>
+    
+    <h1>🏈 College Football</h1>
+    <p>Take look at Cheesyman's favorties or search your own.</p>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <input type="text" id="teamSearch" class="search-input" placeholder="Search for your team..." style="width: 50%;">
+        <input type="text" id="yearSearch" class="search-input" placeholder="Year (optional)" value="2025" style="width: 20%;">
+        <button onclick="searchTeam()" class="search-button">Search</button>
+    </div>
+
+    <!-- Featured Teams -->
+    <div class="featured-teams">
+        <h2>Cheeyman's Teams To Watch</h2>
+        <a href="team.html?team=Indiana&year=2025" class="team-link">Indiana Hoosiers</a>
+        <a href="team.html?team=Notre Dame&year=2025" class="team-link">Notre Dame Fighting Irish</a>
+    </div>
+
+    <footer class="page-footer">
+        &copy; <span id="currentYear"></span> Cheesyman Inc. All rights reserved.
+    </footer>
+
+    <script>
+        // Auto-update copyright year
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+        function searchTeam() {
+            const teamName = document.getElementById('teamSearch').value.trim();
+            let year = document.getElementById('yearSearch').value.trim(); // should default to 2025
+
+            if (!year) {
+                year = new Date().getFullYear().toString();
+            }
+
+            if (teamName && teamName.toLowerCase() === 'purdue') {
+                window.location.href = 'potfb.html'; // fuck purdure
+            } else if (teamName) {
+                window.location.href = `team.html?team=${encodeURIComponent(teamName)}&year=${encodeURIComponent(year)}`; // sends to team.html, which will call for the data.
+            } else {
+                alert('Please enter a team name');
+            }
+        }
+
+        // Allow Enter key to trigger search
+        document.getElementById('teamSearch').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchTeam();
+            }
+        });
+        document.getElementById('yearSearch').addEventListener('keypress,', function(e) {
+            if (e.key === 'Enter') {
+                searchTeam();
+            }
+        });
+
+
+    </script>
+</body>
+</html>

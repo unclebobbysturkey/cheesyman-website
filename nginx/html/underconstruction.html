@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Under Construction!</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f9fafb;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      padding: 2rem;
+    }
+     .maint-img {
+      max-width: 250px;   
+      width: 100%;        
+      height: auto;       
+      margin: 0 auto 1.5rem auto; 
+      display: block;
+      border-radius: 12px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+    footer {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img class="maint-img" src="https://cheeymanwebsite.blob.core.windows.net/photos/underconstruction_2.png?sp=r&st=2025-09-30T16:25:45Z&se=2028-03-16T00:40:45Z&spr=https&sv=2024-11-04&sr=b&sig=J8FZV8QlMlLrEJFpF8eADrHc%2B5SshnqYEJtXT2Czdk8%3D">
+    <h1>Check Back Soon! New Features Coming!</h1>
+    <p>This page is currently getting an upgrade. Please check back soon!</p>
+    <footer>&copy; <span id="year"></span> Cheesyman Inc. All rights reserved.</footer>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

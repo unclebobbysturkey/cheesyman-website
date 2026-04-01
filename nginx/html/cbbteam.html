@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0J8DVETW8G"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-0J8DVETW8G');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Info - Cheesy Sports</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #555;
+            margin-top: 30px;
+        }
+        .team-info {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        .schedule {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        .game {
+            border-bottom: 1px solid #eee;
+            padding: 15px;
+            text-align: left;
+        }
+        .game:last-child {
+            border-bottom: none;
+        }
+        .nav-button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+        .back-button {
+            background-color: #666;
+        }
+        .back-button:hover {
+            background-color: #555;
+        }
+        .home-button {
+            background-color: #4caf50;
+        }
+        .home-button:hover {
+            background-color: #3e8e41;
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+        .error {
+            color: #ff5722;
+            background: #ffeaea;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px auto;
+            max-width: 500px;
+        }
+        .page-footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 3rem;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid #ddd;
+        }
+        .box-score {
+            margin: 10px 0;
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .box-score th, .box-score td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .box-score th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .box-score tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .team-logo {
+            max-width: 200px;
+            height: auto;
+            margin: 20px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <a href="collegebasketball.html" class="nav-button back-button">← Back to College Basketball</a>
+        <a href="../index.html" class="nav-button home-button">Cheesyman Home</a>
+    </div>
+    
+    <div id="team-content">
+        <div class="loading">Loading team information...</div>
+    </div>
+
+    <footer class="page-footer">
+        &copy; <span id="currentYear"></span> Cheesyman Inc. All rights reserved.
+    </footer>
+
+    <script>
+        // Auto-update copyright year
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+        // Get team name from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const teamName = urlParams.get('team');
+        const year = urlParams.get('year');
+        const apiURL = '/cbb_api/';
+
+        if (teamName) {
+            document.querySelector('title').textContent = `${teamName} - Cheesy Sports`;
+            
+            // Call your API function
+            getTeamData(teamName, year);
+        } else {
+            document.getElementById('team-content').innerHTML = `
+                <div class="error">
+                    No team specified. Please go back and select a team.
+                </div>
+            `;
+        }
+
+        async function getTeamData(teamName, year) {
+            
+            const URL = `${apiURL}${encodeURIComponent(teamName)}?year=${encodeURIComponent(year)}`;
+
+            try {
+                document.getElementById('team-content').innerHTML = '<div class="loading">Loading team information...</div>';
+                
+                const response = await fetch(URL);
+
+                if (!response.ok) {
+                    throw new Error(`API returned ${response.status}: ${response.statusText}`);
+                }
+
+                const teamData = await response.json();
+
+                // Display the team information
+                document.getElementById('team-content').innerHTML = `
+                    <h1>${teamData.team.school} ${teamData.team.mascot}</h1>
+                    <img src="${teamData.logo}" alt="${teamData.team.school} logo" class="team-logo">
+                    <div class="team-info">
+                        <p><strong>Conference:</strong> ${teamData.team.conference}</p>
+                        <p><strong>Location:</strong> ${teamData.team.currentCity}, ${teamData.team.currentState}</p>
+                        <p><strong>Stadium:</strong> ${teamData.team.currentVenue}</p>
+                    </div>
+                    <div class="schedule">
+                        <h2>${teamData.games[0].season} Schedule</h2>
+                        <p><strong>Current Record:</strong> ${teamData.currentRecord}</p>
+                        ${teamData.games.map(game => {
+                            const gameScore = (game.homePoints === 0) ? '--' : `${game.homePoints} - ${game.awayPoints}`;
+                            let result;
+                            if (game.homeWinner !== null) {
+                                const winner = game.homeWinner ? game.homeTeam : game.awayTeam;
+                                result = winner.toLowerCase() === teamData.team.school.toLowerCase() ? 'Win' : 'Loss';
+                            } else {
+                                result = '--';
+                            }
+                            let venue = game.venue === null ? 'N/A' : game.venue;
+                            let location = game.city === null ? 'N/A' : `${game.city}, ${game.state}`;
+                        return `
+                            <div class="game">
+                                <p><strong>${game.homeTeam} vs ${game.awayTeam}</strong></p>
+                                <p><strong>Date:</strong> ${game.formatedDate}</p>
+                                <p><strong>Venue:</strong> ${venue}</p>
+                                <p><strong>Location:</strong> ${location}</p>
+                                <p><strong>Score:</strong> ${gameScore}</p>
+                                <p><strong>Result:</strong> ${result}</p>
+                                <table class="box-score">
+                                    <thead>
+                                        <tr>
+                                            <th>Team</th>
+                                            <th>H1</th>
+                                            <th>H2</th>
+                                            <th>Final</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>${game.homeTeam}</td>
+                                            <td>${game.homePeriodPoints && game.homePeriodPoints.length > 0 ? game.homePeriodPoints[0] : '--'}</td>
+                                            <td>${game.homePeriodPoints && game.homePeriodPoints.length > 0 ? game.homePeriodPoints[1] : '--'}</td>
+                                            <td><strong>${game.homePoints === 0 ? '--' : game.homePoints}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td>${game.awayTeam}</td> 
+                                            <td>${game.awayPeriodPoints && game.awayPeriodPoints.length > 0 ? game.awayPeriodPoints[0] : '--'}</td>
+                                            <td>${game.awayPeriodPoints && game.awayPeriodPoints.length > 0 ? game.awayPeriodPoints[1] : '--'}</td>
+                                            <td><strong>${game.awayPoints === 0 ? '--' : game.awayPoints}</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>`;
+                        }).join('')}
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('Error fetching team data:', error);
+                
+                // Display error message to user
+                document.getElementById('team-content').innerHTML = `
+                    <div class="error">
+                        <h3>Unable to Load Team Data</h3>
+                        <p>We couldn't find information for "${teamName}". Please check the team name and try again.</p>
+                        <p><small>Error details: ${error.message}</small></p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

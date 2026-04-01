@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0J8DVETW8G"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-0J8DVETW8G');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheese Gallery - Cheesyman.com</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 30px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #ff9800;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .home-link:hover {
+            background-color: #e68900;
+        }
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 400px;
+        }
+        .gallery-item {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: contain;
+            display: block;
+            cursor: pointer;
+            background-color: #f9f9f9
+        }
+        .gallery-item-number {
+            padding: 10px;
+            font-size: 14px;
+            color: #666;
+            background-color: #f9f9f9;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .pagination button {
+            padding: 10px 15px;
+            font-size: 16px;
+            color: white;
+            background-color: #2196f3;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .pagination button:hover:not(:disabled) {
+            background-color: #0b7dda;
+        }
+        .pagination button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .pagination .page-button {
+            min-width: 40px;
+        }
+        .pagination .page-button.active {
+            background-color: #ff9800;
+        }
+        .pagination .page-button.active:hover {
+            background-color: #e68900;
+        }
+        .page-info {
+            color: #666;
+            font-size: 16px;
+            margin: 0 10px;
+        }
+        .page-footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 3rem;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid #ddd;
+        }
+</style>
+    </style>
+</head>
+<body>
+    <h1>🧀 The Cheesiest Gallery Around! 🧀</h1>
+    <a href="index.html" class="home-link">Back to Home</a>
+    
+    <div class="gallery-container" id="gallery"></div>
+    
+    <div class="pagination">
+        <button onclick="goToPage(1)" id="firstBtn">First</button>
+        <button onclick="previousPage()" id="prevBtn">Previous</button>
+        <span class="page-info" id="pageInfo"></span>
+        <button onclick="nextPage()" id="nextBtn">Next</button>
+        <button onclick="goToPage(totalPages)" id="lastBtn">Last</button>
+    </div>
+    
+    <script src="cheese-images.js"></script>
+    <script>
+        const ITEMS_PER_PAGE = 8;
+        let currentPage = 1;
+        let totalPages = Math.ceil(images.length / ITEMS_PER_PAGE);
+        
+        function displayPage(page) {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = '';
+            
+            const startIndex = (page - 1) * ITEMS_PER_PAGE;
+            const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, images.length);
+            
+            for (let i = startIndex; i < endIndex; i++) {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                
+                const img = document.createElement('img');
+                img.src = images[i];
+                img.alt = `Cheese ${i + 1}`;
+                img.onclick = () => window.open(images[i], '_blank'); 
+                
+                const itemNumber = document.createElement('div');
+                itemNumber.className = 'gallery-item-number';
+                itemNumber.textContent = `Cheese #${i + 1}`;
+                
+                galleryItem.appendChild(img);
+                galleryItem.appendChild(itemNumber);
+                gallery.appendChild(galleryItem);
+            }
+            
+            updatePaginationControls();
+        }
+        
+        function updatePaginationControls() {
+            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('firstBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+            document.getElementById('lastBtn').disabled = currentPage === totalPages;
+        }
+        
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayPage(currentPage);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayPage(currentPage);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
+        function goToPage(page) {
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                displayPage(currentPage);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
+        // Initialize gallery
+        displayPage(1);
+    </script>
+
+    <footer class="page-footer">
+        &copy; <span id="currentYear"></span> Cheesyman Inc. All rights reserved.
+    </footer>
+
+    <script>
+        // Auto-update copyright year
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

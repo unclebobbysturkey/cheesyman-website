@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0J8DVETW8G"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-0J8DVETW8G');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheesy Sports - Cheesyman.com</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #555;
+            margin-top: 30px;
+        }
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .sport-button {
+            background-color: #ff5722;
+        }
+        .sport-button:hover {
+            background-color: #e64a19;
+        }
+        .description {
+            max-width: 600px;
+            margin: 20px auto;
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .button-container {
+            margin-top: 30px;
+        }
+        .page-footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 3rem;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid #ddd;
+        }
+        .home-button {
+            background-color: #4caf50;
+            margin-bottom: 20px;
+        }
+        .home-button:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="button home-button">← Back to Cheesyman Home</a>
+    
+    <h1>Cheesyman's Sports Desk</h1>
+    <p>Checkout Cheesy's favorite sports and teams! You can also search for your own team if you like.</p>
+    <p>More sports are coming!</p>
+
+    <!-- Sports Navigation Buttons -->
+    <div class="button-container">
+        <a href="collegefootball.html" class="button sport-button">College Football</a> <!--collegefootball.html--> 
+        <a href="underconstruction.html" class="button sport-button">College Basketball</a>
+        <!--<a href="underconstruction.html" class="button sport-button">NFL</a>-->
+        <!--<a href="underconstruction.html" class="button sport-button">NBA</a>-->
+        <!--<a href="underconstruction.html" class="button sport-button">Soccer/Calcio</a>-->
+        <a href="racing.html" class="button sport-button">Racing</a>
+    </div>
+
+    <footer class="page-footer">
+        &copy; <span id="currentYear"></span> Cheesyman Inc. All rights reserved.
+    </footer>
+
+    <script>
+        // Auto-update copyright year
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

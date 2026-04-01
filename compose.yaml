@@ -1,0 +1,104 @@
+# Production Docker Compose — cheesyman.com
+# Server paths are relative to /home/webmaster/website/
+# Run: docker compose up -d
+# Rebuild a service after code changes: docker compose up -d --build <service>
+
+services:
+
+  # Nginx reverse proxy — serves static HTML and proxies API routes to Node.js services.
+  # Listens on port 80 and 443. nginx will redirect to 443. 
+  nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # Nginx site config (proxies /cfb_api/, /matchup_api/, /cbb_api/ to respective services)
+      - /home/webmaster/website/nginx/conf.d/nginx_docker.conf:/etc/nginx/conf.d/default.conf
+      # Static HTML files served directly by Nginx
+      - /home/webmaster/website/nginx/html:/usr/share/nginx/html
+      # SSL/HTTPS 
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - cfb_main_app
+      - cfb_matchup_app
+      - cbb_main_app
+      - race_schedule_app
+    # Allows containers to reach the host machine
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # College Football main app — proxies requests to api.collegefootballdata.com.
+  # Route: GET /cfb_api/:schoolName?year=  |  Port 3001
+  cfb_main_app:
+    build: /home/webmaster/website/node/cfb_main_app
+    restart: unless-stopped
+    volumes:
+      - /home/webmaster/website/node/cfb_main_app:/app
+      # Anonymous volume prevents host node_modules from overwriting the container's
+      - /app/node_modules
+    environment:
+      - NODE_ENV=PROD
+      - PORT=${cfb_main_app_PORT}
+
+  # College Football matchup app — provides head-to-head game data.
+  # Route: GET /matchup_api/:gameId?team1=&team2=&year=  |  Port 3002
+  cfb_matchup_app:
+    build: /home/webmaster/website/node/cfb_matchup_app
+    restart: unless-stopped
+    volumes:
+      - /home/webmaster/website/node/cfb_matchup_app:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=PROD
+      - PORT=${cfb_matchup_app_PORT}
+
+  # College Basketball main app — proxies requests to api.collegebasketballdata.com.
+  # Also cross-calls the CFB API to fetch team logos (CBB API doesn't provide them).
+  # Route: GET /cbb_api/:schoolName?year=  |  Port 3003
+  cbb_main_app:
+    build: /home/webmaster/website/node/cbb_main_app
+    restart: unless-stopped
+    volumes:
+      - /home/webmaster/website/node/cbb_main_app:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=PROD
+      - PORT=${cbb_main_app_PORT}
+
+  # Race schedule app that queries the racing_schedule_db
+  # Rout: GET /raceschedule/:slug | Port 3004 
+  race_schedule_app:
+    build: /home/webmaster/website/node/race_schedule_app
+    restart: unless-stopped
+    volumes:
+      - /home/webmaster/website/node/race_schedule_app:/app
+      - /home/webmaster/website/nginx/html/cheese-images.js:/app/cheese-images.js
+      - /app/node_modules
+    environment:
+      - NODE_ENV=PROD
+      - PORT=${race_schedule_app_PORT}
+
+  # PostgreSQL database — stores racing data.
+  # Init scripts in /home/webmaster/website/init/ run once on first startup (schema, seed data).
+  db:
+    image: postgres:16-alpine
+    container_name: racing_schedule_db
+    restart: unless-stopped
+    ports:
+      # Bind only to localhost so host scripts can connect, but port is not exposed externally
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      # Named volume persists DB data across container restarts
+      - postgres_data:/var/lib/postgresql/data
+      # SQL init scripts — only run on a fresh/empty DB
+      - /home/webmaster/website/postgres/init:/docker-entrypoint-initdb.d/
+
+# Named volumes managed by Docker
+volumes:
+  postgres_data:

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0J8DVETW8G"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-0J8DVETW8G');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Matchup - Cheesy Sports</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #555;
+            margin-top: 30px;
+        }
+        .matchup-header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        .history-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        .game-details {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .stat-item {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border-left: 4px solid #4caf50;
+        }
+        .stat-item strong {
+            display: block;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .box-score {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 600px;
+        }
+        .box-score th, .box-score td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .box-score th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .box-score tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .team-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin: 20px 0;
+        }
+        .team-logos img {
+            max-width: 120px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .vs-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #666;
+        }
+        .nav-button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+        .back-button {
+            background-color: #666;
+        }
+        .back-button:hover {
+            background-color: #555;
+        }
+        .home-button {
+            background-color: #4caf50;
+        }
+        .home-button:hover {
+            background-color: #3e8e41;
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+        .error {
+            color: #ff5722;
+            background: #ffeaea;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px auto;
+            max-width: 500px;
+        }
+        .page-footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 3rem;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid #ddd;
+        }
+        .history-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .history-stat {
+            text-align: center;
+            padding: 15px;
+            min-width: 150px;
+        }
+        .history-stat .number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #4caf50;
+        }
+        .history-stat .label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .game-stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .game-stats-table th {
+            background-color: #f2f2f2;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        .game-stats-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        .game-stats-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <a href="#" id="backButton" class="nav-button back-button">← Back to Team</a>
+        <a href="../index.html" class="nav-button home-button">Cheesyman Home</a>
+    </div>
+    
+    <div id="matchup-content">
+        <div class="loading">Loading game matchup information...</div>
+    </div>
+
+    <footer class="page-footer">
+        &copy; <span id="currentYear"></span> Cheesyman Inc. All rights reserved.
+    </footer>
+
+    <script>
+        // Auto-update copyright year
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+        // Get game parameters from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameId = urlParams.get('gameId');
+        const team1 = urlParams.get('team1');
+        const team2 = urlParams.get('team2');
+        const year = urlParams.get('year');
+        const apiURL = '/matchup_api/';
+
+        document.getElementById('backButton').onclick = function(e) {
+            e.preventDefault();
+            window.history.back();
+        };
+
+        if (gameId) {
+            getMatchupData(gameId);
+        } else {
+            document.getElementById('matchup-content').innerHTML = `
+                <div class="error">
+                    No game specified. Please go back and select a game.
+                </div>
+            `;
+        }
+
+        async function getMatchupData(gameId) {
+            const URL = `${apiURL}${gameId}?team1=${team1}&team2=${team2}&year=${year}`;
+
+            try {
+                document.getElementById('matchup-content').innerHTML = '<div class="loading">Loading game matchup information...</div>';
+                
+                const response = await fetch(URL);
+
+                if (!response.ok) {
+                    throw new Error(`API returned ${response.status}: ${response.statusText}`);
+                }
+
+                const matchupData = await response.json();
+
+                // Update page title
+                document.querySelector('title').textContent = `${matchupData.homeTeam} vs ${matchupData.awayTeam} - Cheesy Sports`;
+
+                // Display the matchup information
+                displayMatchupData(matchupData);
+                
+            } catch (error) {
+                console.error('Error fetching matchup data:', error);
+                
+                document.getElementById('matchup-content').innerHTML = `
+                    <div class="error">
+                        <h3>Unable to Load Matchup Data</h3>
+                        <p>We couldn't find information for this game. Please try again.</p>
+                        <p><small>Error details: ${error.message}</small></p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayMatchupData(matchupData) {
+            
+            const historyHtml = ` 
+                <div class="matchup-header">
+                    <h1>${matchupData.homeTeam} vs ${matchupData.awayTeam}</h1>
+                    <div class="team-logos">
+                        <img src="${matchupData.homeTeamLogo}" alt="${matchupData.homeTeam} logo">
+                        <span class="vs-text">VS</span>
+                        <img src="${matchupData.awayTeamLogo}" alt="${matchupData.awayTeam} logo">
+                    </div>
+                </div>
+
+                <div class="history-section">
+                    <h2>Series History</h2>
+                    <div class="history-stats">
+                        <div class="history-stat">
+                            <div class="number">${matchupData.matchupHistory.gamesPlayed}</div>
+                            <div class="label">Total Games</div>
+                        </div>
+                        <div class="history-stat">
+                            <div class="number">${matchupData.matchupHistory.team1 === matchupData.homeTeam.toLowerCase() ? matchupData.matchupHistory.team1wins : matchupData.matchupHistory.team2wins}</div>
+                            <div class="label">${matchupData.matchupHistory.team1 === matchupData.homeTeam.toLowerCase() ? matchupData.homeTeam : matchupData.awayTeam} Wins</div>
+                        </div>
+                        <div class="history-stat">
+                            <div class="number">${matchupData.matchupHistory.team1 === matchupData.awayTeam.toLowerCase() ? matchupData.matchupHistory.team2wins : matchupData.matchupHistory.team1wins}</div>
+                            <div class="label">${matchupData.matchupHistory.team1 === matchupData.awayTeam.toLowerCase() ? matchupData.awayTeam : matchupData.homeTeam} Wins</div>
+                        </div>
+                        <div class="history-stat">
+                            <div class="number">${matchupData.matchupHistory.ties}</div>
+                            <div class="label">Ties</div>
+                        </div>
+                            <div class="history-stat">
+                            <div class="number">${matchupData.matchupHistory.firstgame}</div>
+                            <div class="label">First Game</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const gameDetailsHtml = `
+                <div class="game-details">
+                    <h2>${matchupData.currentSeason} Game Details</h2>
+                    
+                    ${matchupData.gameCompleted ? `
+                        <h3>Final Score</h3>
+                        <table class="box-score">
+                            <thead>
+                                <tr>
+                                    <th>Team</th>
+                                    <th>Q1</th>
+                                    <th>Q2</th>
+                                    <th>Q3</th>
+                                    <th>Q4</th>
+                                    <th>Final</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>${matchupData.homeTeam}</strong></td>
+                                    <td>${matchupData.homeLineScores[0] || 0}</td>
+                                    <td>${matchupData.homeLineScores[1] || 0}</td>
+                                    <td>${matchupData.homeLineScores[2] || 0}</td>
+                                    <td>${matchupData.homeLineScores[3] || 0}</td>
+                                    <td><strong>${matchupData.homeLineScores.reduce((acc, curr) => acc + curr, 0)}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>${matchupData.awayTeam}</strong></td>
+                                    <td>${matchupData.awayLineScores[0] || 0}</td>
+                                    <td>${matchupData.awayLineScores[1] || 0}</td>
+                                    <td>${matchupData.awayLineScores[2] || 0}</td>
+                                    <td>${matchupData.awayLineScores[3] || 0}</td>
+                                    <td><strong>${matchupData.awayLineScores.reduce((acc, curr) => acc + curr, 0)}</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3>Team Statistics</h3>
+                        <table class="game-stats-table">
+                            <thead>
+                                <tr>
+                                    <th>${matchupData.homeTeam}</th>
+                                    <th></th>
+                                    <th>${matchupData.awayTeam}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'totalYards').stat}</td>
+                                    <td>Total Yards</td>
+                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'totalYards').stat}</td>
+                                </tr>
+                                <tr>
+                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'netPassingYards').stat}</td>
+                                    <td>Passing Yards</td>
+                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'netPassingYards').stat}</td>
+                                </tr>
+                                <tr>
+                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'yardsPerPass').stat}</td>
+                                    <td>Yards Per Pass</td>
+                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'yardsPerPass').stat}</td>
+                                </tr>
+                                <tr>
+                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'rushingYards').stat}</td>
+                                    <td>Rushing Yards</td>
+                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'rushingYards').stat}</td>
+                                </tr>
+                                <tr>
+                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'yardsPerRushAttempt').stat}</td>
+                                    <td>Yards Per Rush</td>
+                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'yardsPerRushAttempt').stat}</td>
+                                </tr>
+                                <tr>
+                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'possessionTime').stat}</td>
+                                    <td>Possession Time</td>
+                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'possessionTime').stat}</td>
+                                </tr>                                     
+                                <tr>
+                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'turnovers').stat}</td>
+                                    <td>Turnovers</td>
+                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'turnovers').stat}</td>
+                                </tr>
+                                <tr>
+                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'fumblesLost').stat}</td>
+                                    <td>Fumbles Lost</td>
+                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'fumblesLost').stat}</td>
+                                </tr>        
+                                <tr>
+                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'interceptions').stat}</td>
+                                    <td>Interceptions</td>
+                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'interceptions').stat}</td>
+                                </tr>                                                                                                                       
+
+                            </tbody>
+                        </table>
+                    ` : `
+                        <p style="font-style: italic; color: #666;">Game has not been played yet. Check back after the game for stats and box score.</p>
+                    `}
+                </div>
+            `;
+
+            document.getElementById('matchup-content').innerHTML = historyHtml + gameDetailsHtml; // displays the final HTML
+        }
+    </script>
+</body>
+</html>

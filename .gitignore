@@ -2,4 +2,17 @@
 **/.env
 
 # SQL files. No need to put that up. 
-**/.sql
+*.sql
+
+#Powersehll secrets
+*.race-secrets
+*.secrets
+
+# Potential large files
+*.log
+*.csv
+*.exe
+*.msi
+
+#claude.md
+CLAUDE.md
