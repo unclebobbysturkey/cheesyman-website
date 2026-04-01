@@ -5,9 +5,9 @@ on:
     branches:
       - main
     paths:
-      - 'website_prod/nginx/html/**'
-      - 'website_prod/node/**'
-      - 'website_prod/nginx/*.conf'
+      - 'nginx/html/**'
+      - 'node/**'
+      - 'nginx/*.conf'
 
 jobs:
   deploy:
@@ -34,7 +34,7 @@ jobs:
           --exclude='.git' \
           --exclude='.env' \
           -e "ssh -i ~/.ssh/id_rsa" \
-          ./website_prod/nginx/html/ \
+          ./nginx/html/ \
           ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:${{ secrets.PROD_HTML_PATH }}/
 
     - name: Sync and rebuild changed Node services
@@ -42,13 +42,13 @@ jobs:
         SERVICES=()
 
         for svc in cfb_main_app cfb_matchup_app cbb_main_app race_schedule_app; do
-          if git diff --name-only HEAD~1 HEAD | grep -q "website_prod/node/${svc}/"; then
+          if git diff --name-only HEAD~1 HEAD | grep -q "node/${svc}/"; then
             echo "${svc} changed — syncing"
             rsync -rltvz --delete \
               --exclude='.env' \
               --exclude='node_modules' \
               -e "ssh -i ~/.ssh/id_rsa" \
-              ./website_prod/node/${svc}/ \
+              ./node/${svc}/ \
               ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:${{ secrets.PROD_NODE_PATH }}/${svc}/
             SERVICES+=("${svc}")
           fi
@@ -65,7 +65,7 @@ jobs:
           echo "nginx config changed — syncing and reloading"
           rsync -rltvz \
             -e "ssh -i ~/.ssh/id_rsa" \
-            ./website_prod/nginx/nginx_docker.conf \
+            ./nginx/nginx_docker.conf \
             ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:${{ secrets.PROD_NGINX_CONF_PATH }}/conf.d/nginx_docker.conf
           ssh -i ~/.ssh/id_rsa ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} \
             "docker compose -f ${{ secrets.PROD_COMPOSE_PATH }}/compose.yaml exec nginx nginx -s reload"
