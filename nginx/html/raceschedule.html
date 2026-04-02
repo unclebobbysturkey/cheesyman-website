@@ -102,6 +102,14 @@
             letter-spacing: 0.1em;
         }
 
+        .header-logo {
+            display: block;
+            height: 72px;
+            width: auto;
+            margin: 0 auto 18px;
+            filter: drop-shadow(0 2px 10px rgba(0,0,0,0.6));
+        }
+
         main {
             max-width: 1050px;
             margin: 0 auto;
@@ -336,6 +344,7 @@
     <header id="page-header">
         <div><a href="racing.html" class="back-btn">⬅ Back to Racing</a></div>
         <div><a href="cheesyhome.html" class="back-btn">⬅ Back to Cheese</a></div>
+        <img id="header-logo" class="header-logo" alt="" src="" style="display:none">
         <div class="series-label" id="header-season">2026 Season Schedule</div>
         <h1 id="header-title">Race Schedule</h1>
         <div class="subtitle" id="header-subtitle">Cheesyman.com</div>
@@ -355,80 +364,18 @@
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
         // ── Series metadata ──────────────────────────────────────────────────
-        // Mirrors the series table in the DB (slug, display info, colors).
+        // Keeps only display strings not available from the DB.
+        // Colors (accent, accentGlow, headerBg) are computed from color_accent after fetch.
         const SERIES_META = {
-            'usac-silver-crown': {
-                name:       'USAC Silver Crown',
-                title:      'Silver Crown',
-                subtitle:   'USAC Silver Crown Series',
-                accent:     '#ff5722',
-                accentGlow: 'rgba(255,87,34,0.15)',
-                headerBg:   'linear-gradient(135deg, #111 0%, #1c1c1c 60%, #2a1500 100%)',
-            },
-            'usac-sprint': {
-                name:       'USAC Sprint Car',
-                title:      'Sprint Car',
-                subtitle:   'USAC National Sprint Car Series',
-                accent:     '#ff5722',
-                accentGlow: 'rgba(255,87,34,0.15)',
-                headerBg:   'linear-gradient(135deg, #111 0%, #1c1c1c 60%, #2a1500 100%)',
-            },
-            'usac-midget': {
-                name:       'USAC Midget',
-                title:      'Midget',
-                subtitle:   'USAC National Midget Series',
-                accent:     '#ff5722',
-                accentGlow: 'rgba(255,87,34,0.15)',
-                headerBg:   'linear-gradient(135deg, #111 0%, #1c1c1c 60%, #2a1500 100%)',
-            },
-            'high-limit': {
-                name:       'High Limit Racing',
-                title:      'High Limit Racing',
-                subtitle:   'High Limit Sprint Car Series',
-                accent:     '#f5c800',
-                accentGlow: 'rgba(245,200,0,0.15)',
-                headerBg:   'linear-gradient(135deg, #111 0%, #1c1c1c 60%, #1a1400 100%)',
-            },
-            'woo-sprint': {
-                name:       'World of Outlaws',
-                title:      'NOS Energy Drink Sprint Cars',
-                subtitle:   'World of Outlaws Sprint Car Series',
-                accent:     '#1a4fa0',
-                accentGlow: 'rgba(26,79,160,0.2)',
-                headerBg:   'linear-gradient(135deg, #111 0%, #1c1c1c 60%, #001a3a 100%)',
-            },
-            'indycar': {
-                name:       'IndyCar Series',
-                title:      'IndyCar',
-                subtitle:   'NTT IndyCar Series',
-                accent:     '#0056b3',
-                accentGlow: 'rgba(0,86,179,0.2)',
-                headerBg:   'linear-gradient(135deg, #111 0%, #1c1c1c 60%, #001a3a 100%)',
-            },
-            'nascar-cup': {
-                name:       'NASCAR Cup Series',
-                title:      'NASCAR Cup',
-                subtitle:   'NASCAR Cup Series',
-                accent:     '#ffd700',
-                accentGlow: 'rgba(255,215,0,0.15)',
-                headerBg:   'linear-gradient(135deg, #111 0%, #1c1c1c 60%, #1a1400 100%)',
-            },
-            'imsa': {
-                name:       'IMSA SportsCar Championship',
-                title:      'IMSA',
-                subtitle:   'IMSA WeatherTech SportsCar Championship',
-                accent:     '#c8102e',
-                accentGlow: 'rgba(200,16,46,0.15)',
-                headerBg:   'linear-gradient(135deg, #111 0%, #1c1c1c 60%, #2a0000 100%)',
-            },
-            'f1': {
-                name:       'Formula 1',
-                title:      'Formula 1',
-                subtitle:   'FIA Formula One World Championship',
-                accent:     '#e10600',
-                accentGlow: 'rgba(225,6,0,0.15)',
-                headerBg:   'linear-gradient(135deg, #111 0%, #1c1c1c 60%, #2a0000 100%)',
-            },
+            'usac-silver-crown': { name: 'USAC Silver Crown',          title: 'Silver Crown',              subtitle: 'USAC Silver Crown Series' },
+            'usac-sprint':       { name: 'USAC Sprint Car',            title: 'Sprint Car',                subtitle: 'USAC National Sprint Car Series' },
+            'usac-midget':       { name: 'USAC Midget',               title: 'Midget',                    subtitle: 'USAC National Midget Series' },
+            'high-limit':        { name: 'High Limit Racing',          title: 'High Limit Racing',         subtitle: 'High Limit Sprint Car Series' },
+            'woo-sprint':        { name: 'World of Outlaws',           title: 'NOS Energy Drink Sprint Cars', subtitle: 'World of Outlaws Sprint Car Series' },
+            'indycar':           { name: 'IndyCar Series',             title: 'IndyCar',                   subtitle: 'NTT IndyCar Series' },
+            'nascar-cup':        { name: 'NASCAR Cup Series',          title: 'NASCAR Cup',                subtitle: 'NASCAR Cup Series' },
+            'imsa':              { name: 'IMSA SportsCar Championship',title: 'IMSA',                      subtitle: 'IMSA WeatherTech SportsCar Championship' },
+            'f1':                { name: 'Formula 1',                  title: 'Formula 1',                 subtitle: 'FIA Formula One World Championship' },
         };
 
         const MONTHS  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -443,21 +390,10 @@
         } else {
             const meta = SERIES_META[slug];
 
-            // Apply series colors via CSS custom properties
-            const root = document.documentElement;
-            root.style.setProperty('--accent',      meta.accent);
-            root.style.setProperty('--accent-glow', meta.accentGlow);
-
-            // Apply series-specific styles
-            document.getElementById('page-header').style.background = meta.headerBg;
+            // Apply display strings pre-fetch — colors/logo come from DB after fetch
             document.title = `${meta.name} 2026 - Cheesyman.com`;
             document.getElementById('header-title').textContent   = meta.title;
             document.getElementById('header-subtitle').textContent = `Cheesyman.com \u2014 ${meta.subtitle}`;
-
-            // Inject dynamic row-highlight style for the next upcoming event
-            const style = document.createElement('style');
-            style.textContent = `.next-row { background: ${hexToRgba(meta.accent, 0.09)} !important; outline: 1px solid ${meta.accent}; outline-offset: -1px; }`;
-            document.head.appendChild(style);
 
             // Fetch schedule from API
             fetch(`/raceschedule/${slug}`)
@@ -465,7 +401,34 @@
                     if (!r.ok) throw new Error(`HTTP ${r.status}`);
                     return r.json();
                 })
-                .then(data => renderSchedule(data, meta))
+                .then(data => {
+                    const seriesData = data.series || {};
+                    const root       = document.documentElement;
+
+                    // Compute accent values from DB color_accent
+                    const accent     = seriesData.color_accent || '#ff5722';
+                    const accentGlow = hexToRgba(accent, 0.15);
+                    const headerBg   = `linear-gradient(135deg, #111 0%, #1c1c1c 60%, ${hexToRgba(accent, 0.12)} 100%)`;
+
+                    root.style.setProperty('--accent',      accent);
+                    root.style.setProperty('--accent-glow', accentGlow);
+                    document.getElementById('page-header').style.background = headerBg;
+
+                    // Inject row-highlight style for the next upcoming event
+                    const style = document.createElement('style');
+                    style.textContent = `.next-row { background: ${hexToRgba(accent, 0.09)} !important; outline: 1px solid ${accent}; outline-offset: -1px; }`;
+                    document.head.appendChild(style);
+
+                    // Show logo
+                    const logoImg = document.getElementById('header-logo');
+                    if (seriesData.logo_url) {
+                        logoImg.src = seriesData.logo_url;
+                        logoImg.alt = seriesData.name || meta.name;
+                        logoImg.style.display = 'block';
+                    }
+
+                    renderSchedule(data.events, meta);
+                })
                 .catch(err => {
                     document.getElementById('content').innerHTML =
                         '<div class="error-msg">Failed to load schedule — please try again later.</div>';
