@@ -16,3 +16,6 @@
 
 #claude.md
 CLAUDE.md
+
+#code workspaces
+*.code-workspace

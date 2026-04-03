@@ -51,6 +51,24 @@
             background-color: #e64a19;
             transform: translateY(-2px);
         }
+        .news-link {
+            display: inline-block;
+            margin: 15px;
+            padding: 12px 25px;
+            font-size: 16px;
+            color: white;
+            background-color: #20029a;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .news-link:hover {
+            background-color: #473db5;
+            transform: translate(-2px);
+        }
         .nav-button {
             display: inline-block;
             margin: 10px;
@@ -100,6 +118,11 @@
     <p class="description">Cheesyman's hub for racing schedules and more.</p>
 
     <div class="schedules-section">
+        <h2>Motorsport News</h2>
+        <a href="https://www.racer.com" class="news-link" target="_blank">Racer</a>
+        <a href="https://www.speedsport.com" class="news-link" target="_blank">Speed Sport</a>
+        <a href="https://www.motorsport.com" class="news-link" target="_blank">Motorsport.com</a>
+
         <h2>National/World Series</h2>
         <a href="raceschedule.html?series=indycar" class="schedule-link">NTT Indycar Series</a>
         <a href="raceschedule.html?series=nascar-cup" class="schedule-link">NASCAR Cup Series</a>
