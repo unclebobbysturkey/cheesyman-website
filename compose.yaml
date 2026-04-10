@@ -80,6 +80,19 @@ services:
       - NODE_ENV=PROD
       - PORT=${race_schedule_app_PORT}
 
+  # Members auth app that authenticates members against Entra
+  # Once auth'd used to route to member only html pages
+  members_auth_app:
+    build: /home/webmaster/website/node/members_auth_app
+    volumes:
+      - /home/webmaster/website/node/members_auth_app:/app
+      - /app/node_modules
+    depends_on:
+      - db
+    environment:
+      - NODE_ENV=development
+      - PORT=${members_auth_app_PORT}
+
   # PostgreSQL database — stores racing data.
   # Init scripts in /home/webmaster/website/init/ run once on first startup (schema, seed data).
   db:
