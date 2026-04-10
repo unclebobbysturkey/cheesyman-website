@@ -1,80 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-0J8DVETW8G"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-0J8DVETW8G');
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POTFB - Cheesy Sports</title>
+    <link rel="stylesheet" href="cyberpunk.css">
     <style>
+        /* Override accent to neon red for POTFB */
+        :root {
+            --orange:      #ff0033;
+            --orange-glow: rgba(255, 0, 51, 0.4);
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            background-color: #0a0005;
+            background-image: radial-gradient(circle, #2a0010 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+
+        .potfb-title {
+            font-family: var(--font-display);
+            font-size: clamp(60px, 12vw, 120px);
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            color: #fff;
+            text-shadow:
+                0 0 10px #fff,
+                0 0 30px var(--orange),
+                0 0 80px var(--orange),
+                0 0 140px var(--orange-glow);
+            margin: 32px 0 24px;
             text-align: center;
-            padding: 50px;
-            background: linear-gradient(135deg, #990000 0%, #660000 100%);
-            min-height: 100vh;
         }
-        .nav-button {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            text-decoration: none;
-        }
-        .back-button {
-            background-color: #666;
-        }
-        .back-button:hover {
-            background-color: #555;
-        }
-        .home-button {
-            background-color: #4caf50;
-        }
-        .home-button:hover {
-            background-color: #3e8e41;
-        }
-        .title {
-            font-size: 48px;
-            font-weight: bold;
-            color: #333;
-            margin: 40px 0 30px 0;
-        }
-        .image-container {
-            margin: 30px auto;
-            max-width: 800px;
-        }
-        .image-container img {
+
+        .potfb-img {
             max-width: 100%;
+            width: 800px;
             height: auto;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            border: 1px solid var(--orange);
+            box-shadow: 0 0 24px var(--orange-glow), 0 0 60px rgba(255,0,51,0.08);
+            display: block;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
-    <div>
-        <a href="collegefootball.html" class="nav-button back-button">← Back to College Football</a>
-        <a href="../index.html" class="nav-button home-button">Cheesyman Home</a>
-    </div>
-    
-    <div class="title">POTFB</div>
-    
-    <div class="image-container">
-        <img src="https://cheeymanwebsite.blob.core.windows.net/photos/Mike-Katic-Bucket-1.jpg?sp=r&st=2025-10-14T19:20:22Z&se=2030-03-16T03:35:22Z&spr=https&sv=2024-11-04&sr=b&sig=%2BPvdSWIY3FPB5glu9TnnGzVwk1qF27Oxl4Ln3GItYHc%3D" alt="POTFB">
-    </div>
+    <div class="neon-bar"></div>
+
+    <header class="page-header">
+        <div class="header-nav">
+            <a href="collegefootball.html" class="btn btn-amber">Back to College Football</a>
+            <a href="cheesyhome.html"      class="btn btn-green">Cheesyman Home</a>
+        </div>
+    </header>
+
+    <main class="page-wrap" style="text-align:center; padding-top:20px;">
+        <div class="potfb-title">POTFB</div>
+        <img src="https://cheeymanwebsite.blob.core.windows.net/photos/Mike-Katic-Bucket-1.jpg?sp=r&st=2025-10-14T19:20:22Z&se=2030-03-16T03:35:22Z&spr=https&sv=2024-11-04&sr=b&sig=%2BPvdSWIY3FPB5glu9TnnGzVwk1qF27Oxl4Ln3GItYHc%3D"
+             alt="POTFB" class="potfb-img">
+    </main>
 </body>
 </html>

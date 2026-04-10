@@ -1,153 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-0J8DVETW8G"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-0J8DVETW8G');
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Team Info - Cheesy Sports</title>
+    <link rel="stylesheet" href="cyberpunk.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        /* Injected HTML targets */
+        #team-content h1 {
+            font-family: var(--font-display);
+            font-size: clamp(20px, 4vw, 36px);
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 0.06em;
+            text-shadow: 0 0 10px #fff, 0 0 30px var(--blue), 0 0 60px var(--blue-glow);
+            margin: 28px 0 8px;
             text-align: center;
-            padding: 20px;
-            background-color: #f4f4f4;
         }
-        h1 {
-            color: #333;
+
+        .team-logo {
+            max-width: 180px;
+            height: auto;
+            margin: 16px auto 24px;
+            display: block;
+            filter: drop-shadow(0 0 14px var(--blue-glow));
         }
-        h2 {
-            color: #555;
-            margin-top: 30px;
-        }
-        .team-info {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
+
+        .team-info, .schedule {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 20px 24px;
+            margin: 16px auto;
             max-width: 800px;
-        }
-        .schedule {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
-            max-width: 800px;
-        }
-        .game {
-            border-bottom: 1px solid #eee;
-            padding: 15px;
+            position: relative;
             text-align: left;
         }
-        .game:last-child {
+
+        .team-info::before, .team-info::after,
+        .schedule::before, .schedule::after {
+            content: '';
+            position: absolute;
+            width: 12px; height: 12px;
+            border-style: solid;
+        }
+        .team-info::before, .schedule::before { top:-1px; left:-1px; border-width:2px 0 0 2px; border-color:var(--blue); }
+        .team-info::after,  .schedule::after  { bottom:-1px; right:-1px; border-width:0 2px 2px 0; border-color:var(--blue); }
+        .team-info { border-color: var(--blue); box-shadow: 0 0 12px var(--blue-glow); }
+        .schedule  { border-color: var(--orange); box-shadow: 0 0 12px var(--orange-glow); }
+        .schedule::before { border-color: var(--orange); }
+        .schedule::after  { border-color: var(--orange); }
+
+        .team-info p, .schedule p {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--text-dim);
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+            line-height: 1.5;
+        }
+        .team-info p:last-child, .schedule p:last-child { border-bottom: none; }
+        .team-info p strong, .schedule p strong { color: var(--text); font-weight: 400; }
+
+        .schedule h2 {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.06em;
+            margin: 0 0 16px;
+            text-align: center;
+        }
+
+        .game {
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+        }
+        .game:last-child { border-bottom: none; }
+
+        .game p {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--text-dim);
+            padding: 3px 0;
             border-bottom: none;
         }
-        .nav-button {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            text-decoration: none;
-        }
-        .back-button {
-            background-color: #666;
-        }
-        .back-button:hover {
-            background-color: #555;
-        }
-        .home-button {
-            background-color: #4caf50;
-        }
-        .home-button:hover {
-            background-color: #3e8e41;
-        }
-        .loading {
-            color: #666;
-            font-style: italic;
-        }
-        .error {
-            color: #ff5722;
-            background: #ffeaea;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px auto;
-            max-width: 500px;
-        }
-        .page-footer {
-            text-align: center;
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 3rem;
-            padding: 1rem;
-            background-color: rgba(255, 255, 255, 0.5);
-            border-top: 1px solid #ddd;
-        }
+        .game p strong { color: var(--text); font-weight: 400; }
+
         .box-score {
-            margin: 10px 0;
+            margin: 12px 0 4px;
             border-collapse: collapse;
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
         }
-        
         .box-score th, .box-score td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            border: 1px solid var(--border);
+            padding: 8px 10px;
             text-align: center;
+            font-family: var(--font-mono);
+            font-size: 12px;
         }
-        
         .box-score th {
-            background-color: #f2f2f2;
-            font-weight: bold;
+            background: var(--surface2);
+            color: var(--orange);
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
         }
-        
-        .box-score tr:nth-child(even) {
-            background-color: #f9f9f9;
+        .box-score td { color: var(--text); }
+        .box-score tr:nth-child(even) td { background: var(--surface2); }
+
+        .matchup-link {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--green);
+            text-decoration: none;
+            text-shadow: 0 0 6px var(--green);
+            letter-spacing: 0.1em;
+            margin-top: 6px;
+            transition: opacity 0.15s;
         }
-        .team-logo {
-            max-width: 200px;
-            height: auto;
-            margin: 20px auto;
-            display: block;
-            border-radius: 10px;
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-        }
+        .matchup-link:hover { opacity: 0.75; }
+        .matchup-link::before { content: '> '; }
     </style>
 </head>
 <body>
-    <div>
-        <a href="collegefootball.html" class="nav-button back-button">← Back to College Football</a>
-        <a href="../cheesyhome.html" class="nav-button home-button">Cheesyman Home</a>
-    </div>
-    
-    <div id="team-content">
-        <div class="loading">Loading team information...</div>
-    </div>
+    <div class="neon-bar"></div>
+
+    <header class="page-header">
+        <div class="header-nav">
+            <a href="collegefootball.html" class="btn btn-amber">Back to College Football</a>
+            <a href="cheesyhome.html"      class="btn btn-green">Cheesyman Home</a>
+        </div>
+        <div class="header-kicker">cheesyman.com // sports // cfb</div>
+        <h1>TEAM INFO</h1>
+    </header>
+
+    <main class="page-wrap" style="padding-top:20px;">
+        <div id="team-content">
+            <div class="loading">Loading team information...</div>
+        </div>
+    </main>
 
     <footer class="page-footer">
         &copy; <span id="currentYear"></span> Cheesyman Inc. All rights reserved.
     </footer>
 
     <script>
-        // Auto-update copyright year
         document.getElementById("currentYear").textContent = new Date().getFullYear();
 
-        // Get team name from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const teamName = urlParams.get('team');
         const year = urlParams.get('year');
@@ -155,33 +167,20 @@
 
         if (teamName) {
             document.querySelector('title').textContent = `${teamName} - Cheesy Sports`;
-            
-            // Call your API function
             getTeamData(teamName, year);
         } else {
-            document.getElementById('team-content').innerHTML = `
-                <div class="error">
-                    No team specified. Please go back and select a team.
-                </div>
-            `;
+            document.getElementById('team-content').innerHTML =
+                '<div class="error">No team specified. Please go back and select a team.</div>';
         }
 
         async function getTeamData(teamName, year) {
-            
             const URL = `${apiURL}${encodeURIComponent(teamName)}?year=${encodeURIComponent(year)}`;
-
             try {
                 document.getElementById('team-content').innerHTML = '<div class="loading">Loading team information...</div>';
-                
                 const response = await fetch(URL);
-
-                if (!response.ok) {
-                    throw new Error(`API returned ${response.status}: ${response.statusText}`);
-                }
-
+                if (!response.ok) throw new Error(`API returned ${response.status}: ${response.statusText}`);
                 const teamData = await response.json();
 
-                // Display the team information
                 document.getElementById('team-content').innerHTML = `
                     <h1>${teamData.team.school} ${teamData.team.mascot}</h1>
                     <img src="${teamData.team.logos[0]}" alt="${teamData.team.school} logo" class="team-logo">
@@ -198,37 +197,26 @@
                         <h2>${teamData.games[0].season} Schedule</h2>
                         <p><strong>Current Record:</strong> ${teamData.currentRecord}</p>
                         <p><strong>Coaches Poll:</strong> ${teamData.currentRank.CoachesRank !== null ? `#${teamData.currentRank.CoachesRank}` : 'Not Ranked'}</p>
-                        <p><strong>AP Top 25 Poll:</strong> ${teamData.currentRank.APTop25Rank !== null ? `#${teamData.currentRank.APTop25Rank}` : 'Not Ranked'}</p>   
+                        <p><strong>AP Top 25 Poll:</strong> ${teamData.currentRank.APTop25Rank !== null ? `#${teamData.currentRank.APTop25Rank}` : 'Not Ranked'}</p>
                         ${teamData.games.map(game => {
                             const gameScore = (game.homePoints === null) ? '--' : `${game.homePoints} - ${game.awayPoints}`;
                             let result;
                             if (game.homePoints !== null) {
                                 const winner = game.homePoints > game.awayPoints ? game.homeTeam : game.awayTeam;
                                 result = winner.toLowerCase() === teamData.team.school.toLowerCase() ? 'Win' : 'Loss';
-                            } else {
-                                result = '--';
-                            }
+                            } else { result = '--'; }
                             let venue = game.venue === null ? 'N/A' : game.venue;
-                        return `
+                            return `
                             <div class="game">
-                                <p><strong>${game.seasonType === 'regular' ? `Week ${game.week}`: `Postseason Week ${game.week}`}</strong></p> 
+                                <p><strong>${game.seasonType === 'regular' ? `Week ${game.week}` : `Postseason Week ${game.week}`}</strong></p>
                                 <p><strong>${game.homeTeam} vs ${game.awayTeam}</strong></p>
                                 <p><strong>Date:</strong> ${game.formatedDate} @ ${game.formatedTime}</p>
                                 <p><strong>Venue:</strong> ${venue}</p>
                                 <p><strong>Score:</strong> ${gameScore}</p>
                                 <p><strong>Result:</strong> ${result}</p>
-                                <p><a href="footballmatchup.html?gameId=${game.id}&team1=${game.homeTeam}&team2=${game.awayTeam}&year=${game.season}" style="color: #4caf50; text-decoration: none; font-weight: bold;">Matchup Details</a></p>
+                                <p><a href="footballmatchup.html?gameId=${game.id}&team1=${game.homeTeam}&team2=${game.awayTeam}&year=${game.season}" class="matchup-link">Matchup Details</a></p>
                                 <table class="box-score">
-                                    <thead>
-                                        <tr>
-                                            <th>Team</th>
-                                            <th>Q1</th>
-                                            <th>Q2</th>
-                                            <th>Q3</th>
-                                            <th>Q4</th>
-                                            <th>Final</th>
-                                        </tr>
-                                    </thead>
+                                    <thead><tr><th>Team</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>Final</th></tr></thead>
                                     <tbody>
                                         <tr>
                                             <td>${game.homeTeam}</td>
@@ -239,7 +227,7 @@
                                             <td><strong>${game.homePoints === null ? '--' : game.homePoints}</strong></td>
                                         </tr>
                                         <tr>
-                                            <td>${game.awayTeam}</td> 
+                                            <td>${game.awayTeam}</td>
                                             <td>${game.awayLineScores && game.awayLineScores.length > 0 ? game.awayLineScores[0] : '--'}</td>
                                             <td>${game.awayLineScores && game.awayLineScores.length > 0 ? game.awayLineScores[1] : '--'}</td>
                                             <td>${game.awayLineScores && game.awayLineScores.length > 0 ? game.awayLineScores[2] : '--'}</td>
@@ -252,16 +240,13 @@
                         }).join('')}
                     </div>
                 `;
-                
             } catch (error) {
                 console.error('Error fetching team data:', error);
-                
-                // Display error message to user
                 document.getElementById('team-content').innerHTML = `
                     <div class="error">
-                        <h3>Unable to Load Team Data</h3>
-                        <p>We couldn't find information for "${teamName}". Please check the team name and try again.</p>
-                        <p><small>Error details: ${error.message}</small></p>
+                        <strong>Unable to Load Team Data</strong><br>
+                        We couldn't find information for "${teamName}". Please check the team name and try again.<br>
+                        <small>${error.message}</small>
                     </div>
                 `;
             }

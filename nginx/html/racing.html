@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-0J8DVETW8G"></script>
     <script>
@@ -13,132 +14,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Racing - Cheesy Sports</title>
+    <link rel="stylesheet" href="cyberpunk.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            color: #333;
-        }
-        h2 {
-            color: #555;
-            margin-top: 30px;
-        }
-        .description {
-            max-width: 500px;
-            margin: 10px auto 30px;
-            color: #666;
-            font-size: 16px;
-        }
-        .schedule-link {
-            display: inline-block;
-            margin: 15px;
-            padding: 12px 25px;
-            font-size: 16px;
-            color: white;
-            background-color: #ff5722;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        .schedule-link:hover {
-            background-color: #e64a19;
-            transform: translateY(-2px);
-        }
-        .news-link {
-            display: inline-block;
-            margin: 15px;
-            padding: 12px 25px;
-            font-size: 16px;
-            color: white;
-            background-color: #20029a;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        .news-link:hover {
-            background-color: #473db5;
-            transform: translate(-2px);
-        }
-        .nav-button {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            text-decoration: none;
-        }
-        .back-button {
-            background-color: #666;
-        }
-        .back-button:hover {
-            background-color: #555;
-        }
-        .home-button {
-            background-color: #4caf50;
-        }
-        .home-button:hover {
-            background-color: #3e8e41;
-        }
         .schedules-section {
-            margin: 30px auto;
-            max-width: 600px;
+            max-width: 680px;
+            margin: 0 auto;
         }
-        .page-footer {
+        .btn-cluster {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+        .racing-desc {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--text-dim);
             text-align: center;
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 3rem;
-            padding: 1rem;
-            background-color: rgba(255, 255, 255, 0.5);
-            border-top: 1px solid #ddd;
+            margin-bottom: 36px;
+            letter-spacing: 0.04em;
         }
     </style>
 </head>
 <body>
-    <div>
-        <a href="sports.html" class="nav-button back-button">← Back to Sports</a>
-        <a href="../cheesyhome.html" class="nav-button home-button">Cheesyman Home</a>
-    </div>
+    <div class="neon-bar"></div>
 
-    <h1>🏁 Racing</h1>
-    <p class="description">Cheesyman's hub for racing schedules and more.</p>
+    <header class="page-header">
+        <div class="header-nav">
+            <a href="sports.html"      class="btn btn-amber">Back to Sports</a>
+            <a href="cheesyhome.html"  class="btn btn-green">Cheesyman Home</a>
+        </div>
+        <div class="header-kicker">cheesyman.com // racing</div>
+        <h1>RACING</h1>
+        <p class="header-sub">Cheesyman's hub for racing schedules and news.</p>
+    </header>
 
-    <div class="schedules-section">
-        <h2>Motorsport News</h2>
-        <a href="https://www.racer.com" class="news-link" target="_blank">Racer</a>
-        <a href="https://www.speedsport.com" class="news-link" target="_blank">Speed Sport</a>
-        <a href="https://www.motorsport.com" class="news-link" target="_blank">Motorsport.com</a>
+    <main class="page-wrap" style="padding-top:40px;">
+        <div class="schedules-section">
 
-        <h2>National/World Series</h2>
-        <a href="raceschedule.html?series=indycar" class="schedule-link">NTT Indycar Series</a>
-        <a href="raceschedule.html?series=nascar-cup" class="schedule-link">NASCAR Cup Series</a>
-        <a href="raceschedule.html?series=f1" class="schedule-link">Formula 1 World Championship</a>
-        <a href="raceschedule.html?series=imsa" class="schedule-link">IMSA Sports Car Championship</a>
+            <div class="section-label">motorsport news</div>
+            <div class="btn-cluster">
+                <a href="https://www.racer.com"       class="btn btn-blue" target="_blank">Racer</a>
+                <a href="https://www.speedsport.com"  class="btn btn-blue" target="_blank">Speed Sport</a>
+                <a href="https://www.motorsport.com"  class="btn btn-blue" target="_blank">Motorsport.com</a>
+            </div>
 
-        <h2>USAC National Schedules</h2>
-        <a href="raceschedule.html?series=usac-silver-crown" class="schedule-link">Silver Crown</a>
-        <a href="raceschedule.html?series=usac-sprint" class="schedule-link">Sprint Car</a>
-        <a href="raceschedule.html?series=usac-midget" class="schedule-link">Midget</a>
+            <div class="section-label" style="margin-top:32px;">national / world series</div>
+            <div class="btn-cluster">
+                <a href="raceschedule.html?series=indycar"    class="btn btn-orange">NTT IndyCar Series</a>
+                <a href="raceschedule.html?series=nascar-cup" class="btn btn-orange">NASCAR Cup Series</a>
+                <a href="raceschedule.html?series=f1"         class="btn btn-orange">Formula 1</a>
+                <a href="raceschedule.html?series=imsa"       class="btn btn-orange">IMSA Sports Car</a>
+            </div>
 
-        <h2>WOO and High Limit Schedules</h2>
-        <a href="raceschedule.html?series=woo-sprint" class="schedule-link">World of Outlaws</a>
-        <a href="raceschedule.html?series=high-limit" class="schedule-link">High Limit</a>
+            <div class="section-label" style="margin-top:32px;">usac national schedules</div>
+            <div class="btn-cluster">
+                <a href="raceschedule.html?series=usac-silver-crown" class="btn btn-orange">Silver Crown</a>
+                <a href="raceschedule.html?series=usac-sprint"       class="btn btn-orange">Sprint Car</a>
+                <a href="raceschedule.html?series=usac-midget"       class="btn btn-orange">Midget</a>
+            </div>
 
-    </div>
+            <div class="section-label" style="margin-top:32px;">woo and high limit</div>
+            <div class="btn-cluster">
+                <a href="raceschedule.html?series=woo-sprint"  class="btn btn-orange">World of Outlaws</a>
+                <a href="raceschedule.html?series=high-limit"  class="btn btn-orange">High Limit</a>
+            </div>
+
+        </div>
+    </main>
 
     <footer class="page-footer">
         &copy; <span id="currentYear"></span> Cheesyman Inc. All rights reserved.

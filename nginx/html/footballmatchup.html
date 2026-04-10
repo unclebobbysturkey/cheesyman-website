@@ -1,223 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-0J8DVETW8G"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-0J8DVETW8G');
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Matchup - Cheesy Sports</title>
+    <link rel="stylesheet" href="cyberpunk.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            color: #333;
-        }
-        h2 {
-            color: #555;
-            margin-top: 30px;
-        }
-        .matchup-header {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
+        /* Injected HTML panels */
+        .matchup-header, .history-section, .game-details {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 20px 24px;
+            margin: 16px auto;
             max-width: 800px;
+            position: relative;
         }
-        .history-section {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
-            max-width: 800px;
+        .matchup-header::before, .matchup-header::after,
+        .history-section::before, .history-section::after,
+        .game-details::before, .game-details::after {
+            content: '';
+            position: absolute;
+            width: 12px; height: 12px;
+            border-style: solid;
         }
-        .game-details {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
-            max-width: 800px;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
-            text-align: left;
-        }
-        .stat-item {
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            border-left: 4px solid #4caf50;
-        }
-        .stat-item strong {
-            display: block;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        .box-score {
-            margin: 20px auto;
-            border-collapse: collapse;
-            width: 100%;
-            max-width: 600px;
-        }
-        .box-score th, .box-score td {
-            border: 1px solid #ddd;
-            padding: 8px;
+        .matchup-header { border-color: var(--blue); box-shadow: 0 0 12px var(--blue-glow); }
+        .matchup-header::before { top:-1px; left:-1px; border-width:2px 0 0 2px; border-color:var(--blue); }
+        .matchup-header::after  { bottom:-1px; right:-1px; border-width:0 2px 2px 0; border-color:var(--blue); }
+
+        .history-section { border-color: var(--purple); box-shadow: 0 0 12px var(--purple-glow); }
+        .history-section::before { top:-1px; left:-1px; border-width:2px 0 0 2px; border-color:var(--purple); }
+        .history-section::after  { bottom:-1px; right:-1px; border-width:0 2px 2px 0; border-color:var(--purple); }
+
+        .game-details { border-color: var(--orange); box-shadow: 0 0 12px var(--orange-glow); }
+        .game-details::before { top:-1px; left:-1px; border-width:2px 0 0 2px; border-color:var(--orange); }
+        .game-details::after  { bottom:-1px; right:-1px; border-width:0 2px 2px 0; border-color:var(--orange); }
+
+        .matchup-header h1 {
+            font-family: var(--font-display);
+            font-size: clamp(16px, 3.5vw, 28px);
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 0.06em;
+            text-shadow: 0 0 20px var(--blue-glow);
+            margin-bottom: 16px;
             text-align: center;
         }
-        .box-score th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        .box-score tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+
         .team-logos {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 30px;
-            margin: 20px 0;
+            margin: 16px 0;
         }
         .team-logos img {
-            max-width: 120px;
+            max-width: 100px;
             height: auto;
-            border-radius: 10px;
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            filter: drop-shadow(0 0 10px var(--blue-glow));
         }
         .vs-text {
-            font-size: 24px;
-            font-weight: bold;
-            color: #666;
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--orange);
+            text-shadow: 0 0 10px var(--orange), 0 0 30px var(--orange-glow);
         }
-        .nav-button {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            text-decoration: none;
-        }
-        .back-button {
-            background-color: #666;
-        }
-        .back-button:hover {
-            background-color: #555;
-        }
-        .home-button {
-            background-color: #4caf50;
-        }
-        .home-button:hover {
-            background-color: #3e8e41;
-        }
-        .loading {
-            color: #666;
-            font-style: italic;
-        }
-        .error {
-            color: #ff5722;
-            background: #ffeaea;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px auto;
-            max-width: 500px;
-        }
-        .page-footer {
+
+        .history-section h2, .game-details h2 {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 16px;
             text-align: center;
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 3rem;
-            padding: 1rem;
-            background-color: rgba(255, 255, 255, 0.5);
-            border-top: 1px solid #ddd;
         }
+
+        .history-section h3, .game-details h3 {
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dim);
+            margin: 20px 0 10px;
+            text-align: center;
+        }
+
         .history-stats {
             display: flex;
             justify-content: space-around;
-            margin: 20px 0;
             flex-wrap: wrap;
+            gap: 12px;
+            margin: 16px 0;
         }
         .history-stat {
             text-align: center;
-            padding: 15px;
-            min-width: 150px;
+            padding: 12px;
+            min-width: 120px;
         }
         .history-stat .number {
-            font-size: 32px;
-            font-weight: bold;
-            color: #4caf50;
+            font-family: var(--font-display);
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple), 0 0 30px var(--purple-glow);
+            line-height: 1;
         }
         .history-stat .label {
-            font-size: 14px;
-            color: #666;
-            margin-top: 5px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-top: 6px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
         }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 16px 0;
+        }
+        .stat-item {
+            padding: 10px 12px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--green);
+            border-radius: 2px;
+        }
+        .stat-item strong {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-bottom: 4px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 400;
+        }
+
+        .game-details p {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--text-dim);
+            text-align: center;
+            padding: 4px 0;
+        }
+
+        .not-played-msg {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--text-dim);
+            text-align: center;
+            letter-spacing: 0.06em;
+            padding: 16px 0;
+        }
+        .not-played-msg::before { content: '// '; color: var(--amber); }
+
+        .box-score {
+            margin: 12px auto;
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 580px;
+        }
+        .box-score th, .box-score td {
+            border: 1px solid var(--border);
+            padding: 8px 10px;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 12px;
+        }
+        .box-score th {
+            background: var(--surface2);
+            color: var(--orange);
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        .box-score td { color: var(--text); }
+        .box-score tr:nth-child(even) td { background: var(--surface2); }
+
         .game-stats-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin: 12px 0;
+            max-width: 640px;
+            margin-left: auto; margin-right: auto;
         }
         .game-stats-table th {
-            background-color: #f2f2f2;
+            background: var(--surface2);
             padding: 10px;
             text-align: center;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--orange);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
         }
         .game-stats-table td {
-            padding: 10px;
-            border: 1px solid #ddd;
+            padding: 9px 10px;
+            border: 1px solid var(--border);
             text-align: center;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--text);
         }
-        .game-stats-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+        .game-stats-table td:nth-child(2) { color: var(--text-dim); font-size: 11px; letter-spacing: 0.08em; }
+        .game-stats-table tr:nth-child(even) td { background: var(--surface2); }
     </style>
 </head>
 <body>
-    <div>
-        <a href="#" id="backButton" class="nav-button back-button">← Back to Team</a>
-        <a href="../index.html" class="nav-button home-button">Cheesyman Home</a>
-    </div>
-    
-    <div id="matchup-content">
-        <div class="loading">Loading game matchup information...</div>
-    </div>
+    <div class="neon-bar"></div>
+
+    <header class="page-header">
+        <div class="header-nav">
+            <a href="#" id="backButton" class="btn btn-amber">Back to Team</a>
+            <a href="cheesyhome.html" class="btn btn-green">Cheesyman Home</a>
+        </div>
+        <div class="header-kicker">cheesyman.com // sports // cfb</div>
+        <h1>GAME MATCHUP</h1>
+    </header>
+
+    <main class="page-wrap" style="padding-top:20px;">
+        <div id="matchup-content">
+            <div class="loading">Loading game matchup information...</div>
+        </div>
+    </main>
 
     <footer class="page-footer">
         &copy; <span id="currentYear"></span> Cheesyman Inc. All rights reserved.
     </footer>
 
     <script>
-        // Auto-update copyright year
         document.getElementById("currentYear").textContent = new Date().getFullYear();
 
-        // Get game parameters from URL
         const urlParams = new URLSearchParams(window.location.search);
         const gameId = urlParams.get('gameId');
-        const team1 = urlParams.get('team1');
-        const team2 = urlParams.get('team2');
-        const year = urlParams.get('year');
+        const team1  = urlParams.get('team1');
+        const team2  = urlParams.get('team2');
+        const year   = urlParams.get('year');
         const apiURL = '/matchup_api/';
 
         document.getElementById('backButton').onclick = function(e) {
@@ -228,49 +259,33 @@
         if (gameId) {
             getMatchupData(gameId);
         } else {
-            document.getElementById('matchup-content').innerHTML = `
-                <div class="error">
-                    No game specified. Please go back and select a game.
-                </div>
-            `;
+            document.getElementById('matchup-content').innerHTML =
+                '<div class="error">No game specified. Please go back and select a game.</div>';
         }
 
         async function getMatchupData(gameId) {
             const URL = `${apiURL}${gameId}?team1=${team1}&team2=${team2}&year=${year}`;
-
             try {
                 document.getElementById('matchup-content').innerHTML = '<div class="loading">Loading game matchup information...</div>';
-                
                 const response = await fetch(URL);
-
-                if (!response.ok) {
-                    throw new Error(`API returned ${response.status}: ${response.statusText}`);
-                }
-
+                if (!response.ok) throw new Error(`API returned ${response.status}: ${response.statusText}`);
                 const matchupData = await response.json();
-
-                // Update page title
                 document.querySelector('title').textContent = `${matchupData.homeTeam} vs ${matchupData.awayTeam} - Cheesy Sports`;
-
-                // Display the matchup information
                 displayMatchupData(matchupData);
-                
             } catch (error) {
                 console.error('Error fetching matchup data:', error);
-                
                 document.getElementById('matchup-content').innerHTML = `
                     <div class="error">
-                        <h3>Unable to Load Matchup Data</h3>
-                        <p>We couldn't find information for this game. Please try again.</p>
-                        <p><small>Error details: ${error.message}</small></p>
+                        <strong>Unable to Load Matchup Data</strong><br>
+                        We couldn't find information for this game. Please try again.<br>
+                        <small>${error.message}</small>
                     </div>
                 `;
             }
         }
 
         function displayMatchupData(matchupData) {
-            
-            const historyHtml = ` 
+            const historyHtml = `
                 <div class="matchup-header">
                     <h1>${matchupData.homeTeam} vs ${matchupData.awayTeam}</h1>
                     <div class="team-logos">
@@ -299,7 +314,7 @@
                             <div class="number">${matchupData.matchupHistory.ties}</div>
                             <div class="label">Ties</div>
                         </div>
-                            <div class="history-stat">
+                        <div class="history-stat">
                             <div class="number">${matchupData.matchupHistory.firstgame}</div>
                             <div class="label">First Game</div>
                         </div>
@@ -310,20 +325,10 @@
             const gameDetailsHtml = `
                 <div class="game-details">
                     <h2>${matchupData.currentSeason} Game Details</h2>
-                    
                     ${matchupData.gameCompleted ? `
                         <h3>Final Score</h3>
                         <table class="box-score">
-                            <thead>
-                                <tr>
-                                    <th>Team</th>
-                                    <th>Q1</th>
-                                    <th>Q2</th>
-                                    <th>Q3</th>
-                                    <th>Q4</th>
-                                    <th>Final</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>Team</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>Final</th></tr></thead>
                             <tbody>
                                 <tr>
                                     <td><strong>${matchupData.homeTeam}</strong></td>
@@ -331,7 +336,7 @@
                                     <td>${matchupData.homeLineScores[1] || 0}</td>
                                     <td>${matchupData.homeLineScores[2] || 0}</td>
                                     <td>${matchupData.homeLineScores[3] || 0}</td>
-                                    <td><strong>${matchupData.homeLineScores.reduce((acc, curr) => acc + curr, 0)}</strong></td>
+                                    <td><strong>${matchupData.homeLineScores.reduce((a,c)=>a+c,0)}</strong></td>
                                 </tr>
                                 <tr>
                                     <td><strong>${matchupData.awayTeam}</strong></td>
@@ -339,76 +344,30 @@
                                     <td>${matchupData.awayLineScores[1] || 0}</td>
                                     <td>${matchupData.awayLineScores[2] || 0}</td>
                                     <td>${matchupData.awayLineScores[3] || 0}</td>
-                                    <td><strong>${matchupData.awayLineScores.reduce((acc, curr) => acc + curr, 0)}</strong></td>
+                                    <td><strong>${matchupData.awayLineScores.reduce((a,c)=>a+c,0)}</strong></td>
                                 </tr>
                             </tbody>
                         </table>
-
                         <h3>Team Statistics</h3>
                         <table class="game-stats-table">
-                            <thead>
-                                <tr>
-                                    <th>${matchupData.homeTeam}</th>
-                                    <th></th>
-                                    <th>${matchupData.awayTeam}</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>${matchupData.homeTeam}</th><th></th><th>${matchupData.awayTeam}</th></tr></thead>
                             <tbody>
-                                <tr>
-                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'totalYards').stat}</td>
-                                    <td>Total Yards</td>
-                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'totalYards').stat}</td>
-                                </tr>
-                                <tr>
-                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'netPassingYards').stat}</td>
-                                    <td>Passing Yards</td>
-                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'netPassingYards').stat}</td>
-                                </tr>
-                                <tr>
-                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'yardsPerPass').stat}</td>
-                                    <td>Yards Per Pass</td>
-                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'yardsPerPass').stat}</td>
-                                </tr>
-                                <tr>
-                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'rushingYards').stat}</td>
-                                    <td>Rushing Yards</td>
-                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'rushingYards').stat}</td>
-                                </tr>
-                                <tr>
-                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'yardsPerRushAttempt').stat}</td>
-                                    <td>Yards Per Rush</td>
-                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'yardsPerRushAttempt').stat}</td>
-                                </tr>
-                                <tr>
-                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'possessionTime').stat}</td>
-                                    <td>Possession Time</td>
-                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'possessionTime').stat}</td>
-                                </tr>                                     
-                                <tr>
-                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'turnovers').stat}</td>
-                                    <td>Turnovers</td>
-                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'turnovers').stat}</td>
-                                </tr>
-                                <tr>
-                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'fumblesLost').stat}</td>
-                                    <td>Fumbles Lost</td>
-                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'fumblesLost').stat}</td>
-                                </tr>        
-                                <tr>
-                                    <td>${matchupData.homeTeamStats.find(stat => stat.category === 'interceptions').stat}</td>
-                                    <td>Interceptions</td>
-                                    <td>${matchupData.awayTeamStats.find(stat => stat.category === 'interceptions').stat}</td>
-                                </tr>                                                                                                                       
-
+                                <tr><td>${matchupData.homeTeamStats.find(s=>s.category==='totalYards').stat}</td><td>Total Yards</td><td>${matchupData.awayTeamStats.find(s=>s.category==='totalYards').stat}</td></tr>
+                                <tr><td>${matchupData.homeTeamStats.find(s=>s.category==='netPassingYards').stat}</td><td>Passing Yards</td><td>${matchupData.awayTeamStats.find(s=>s.category==='netPassingYards').stat}</td></tr>
+                                <tr><td>${matchupData.homeTeamStats.find(s=>s.category==='yardsPerPass').stat}</td><td>Yards Per Pass</td><td>${matchupData.awayTeamStats.find(s=>s.category==='yardsPerPass').stat}</td></tr>
+                                <tr><td>${matchupData.homeTeamStats.find(s=>s.category==='rushingYards').stat}</td><td>Rushing Yards</td><td>${matchupData.awayTeamStats.find(s=>s.category==='rushingYards').stat}</td></tr>
+                                <tr><td>${matchupData.homeTeamStats.find(s=>s.category==='yardsPerRushAttempt').stat}</td><td>Yards Per Rush</td><td>${matchupData.awayTeamStats.find(s=>s.category==='yardsPerRushAttempt').stat}</td></tr>
+                                <tr><td>${matchupData.homeTeamStats.find(s=>s.category==='possessionTime').stat}</td><td>Possession Time</td><td>${matchupData.awayTeamStats.find(s=>s.category==='possessionTime').stat}</td></tr>
+                                <tr><td>${matchupData.homeTeamStats.find(s=>s.category==='turnovers').stat}</td><td>Turnovers</td><td>${matchupData.awayTeamStats.find(s=>s.category==='turnovers').stat}</td></tr>
+                                <tr><td>${matchupData.homeTeamStats.find(s=>s.category==='fumblesLost').stat}</td><td>Fumbles Lost</td><td>${matchupData.awayTeamStats.find(s=>s.category==='fumblesLost').stat}</td></tr>
+                                <tr><td>${matchupData.homeTeamStats.find(s=>s.category==='interceptions').stat}</td><td>Interceptions</td><td>${matchupData.awayTeamStats.find(s=>s.category==='interceptions').stat}</td></tr>
                             </tbody>
                         </table>
-                    ` : `
-                        <p style="font-style: italic; color: #666;">Game has not been played yet. Check back after the game for stats and box score.</p>
-                    `}
+                    ` : `<p class="not-played-msg">Game has not been played yet. Check back after the game for stats and box score.</p>`}
                 </div>
             `;
 
-            document.getElementById('matchup-content').innerHTML = historyHtml + gameDetailsHtml; // displays the final HTML
+            document.getElementById('matchup-content').innerHTML = historyHtml + gameDetailsHtml;
         }
     </script>
 </body>

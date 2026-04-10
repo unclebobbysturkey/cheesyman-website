@@ -1,172 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+
     <!--- Google tag (gtag.js) --->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-0J8DVETW8G"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-0J8DVETW8G');
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>College Football - Cheesy Sports</title>
+    <title>College Basketball - Cheesy Sports</title>
+    <link rel="stylesheet" href="cyberpunk.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            color: #333;
-        }
-        h2 {
-            color: #555;
-            margin-top: 30px;
-        }
-        .team-link {
-            display: inline-block;
-            margin: 15px;
-            padding: 12px 25px;
-            font-size: 16px;
-            color: white;
-            background-color: #2196f3;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        .team-link:hover {
-            background-color: #0b7dda;
-            transform: translateY(-2px);
-        }
-        .search-container {
-            margin: 20px auto; /* Reduced from 30px to bring them closer */
-            max-width: 500px;
+        .search-row {
             display: flex;
-            gap: 10px;
-            align-items: center;
+            gap: 8px;
+            align-items: stretch;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
         }
-        .search-input {
-            padding: 12px;
-            font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            width: 70%;
-        }
-        .search-button {
-            padding: 12px 20px;
-            font-size: 16px;
-            background-color: #ff5722;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .search-button:hover {
-            background-color: #e64a19;
-        }
-        .nav-button {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            text-decoration: none;
-        }
-        .back-button {
-            background-color: #666;
-        }
-        .back-button:hover {
-            background-color: #555;
-        }
-        .home-button {
-            background-color: #4caf50;
-        }
-        .home-button:hover {
-            background-color: #3e8e41;
-        }
-        .featured-teams {
-            margin: 30px auto;
-            max-width: 600px;
-        }
-        .page-footer {
-            text-align: center;
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 3rem;
-            padding: 1rem;
-            background-color: rgba(255, 255, 255, 0.5);
-            border-top: 1px solid #ddd;
+
+        .search-row .cy-input { flex: 1; min-width: 160px; }
+
+        .btn-cluster {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 16px;
         }
     </style>
 </head>
 <body>
-    <div>
-        <a href="sports.html" class="nav-button back-button">← Back to Sports</a>
-        <a href="../index.html" class="nav-button home-button">Cheesyman Home</a>
-    </div>
-    
-    <h1>🏀 College Basketball</h1>
-    <p>Take look at Cheesyman's favorties or search your own.</p>
+    <div class="neon-bar"></div>
 
-    <!-- Search Bar -->
-    <div class="search-container">
-        <input type="text" id="teamSearch" class="search-input" placeholder="Search for your team..." style="width: 75%;">
-        <!--<input type="text" id="yearSearch" class="search-input" placeholder="Year (optional)" value="2026" style="width: 20%;">-->
-        <button onclick="searchTeam()" class="search-button">Search</button>
-    </div>
+    <header class="page-header">
+        <div class="header-nav">
+            <a href="sports.html"      class="btn btn-amber">Back to Sports</a>
+            <a href="cheesyhome.html"  class="btn btn-green">Cheesyman Home</a>
+        </div>
+        <div class="header-kicker">cheesyman.com // sports</div>
+        <h1>COLLEGE BASKETBALL</h1>
+        <p class="header-sub">Take a look at Cheesyman's favorites or search your own.</p>
+    </header>
 
-    <!-- Featured Teams -->
-    <div class="featured-teams">
-        <h2>Cheeyman's Teams To Watch</h2>
-        <a href="cbbteam.html?team=Indiana&year=2026" class="team-link">Indiana Hoosiers</a>
-    </div>
+    <main class="page-wrap" style="padding-top:40px;">
+
+        <div class="section-label">search teams</div>
+        <div class="search-row">
+            <input type="text" id="teamSearch" class="cy-input" placeholder="Search for your team...">
+            <button onclick="searchTeam()" class="btn btn-orange" style="margin:0;">Search</button>
+        </div>
+
+        <div class="section-label" style="margin-top:44px;">cheesyman's teams to watch</div>
+        <div class="btn-cluster">
+            <a href="cbbteam.html?team=Indiana&year=2026" class="btn btn-blue">Indiana Hoosiers</a>
+        </div>
+
+    </main>
 
     <footer class="page-footer">
         &copy; <span id="currentYear"></span> Cheesyman Inc. All rights reserved.
     </footer>
 
     <script>
-        // Auto-update copyright year
         document.getElementById("currentYear").textContent = new Date().getFullYear();
 
         function searchTeam() {
             const teamName = document.getElementById('teamSearch').value.trim();
             let year = 2026;
-    
             if (teamName) {
                 window.location.href = `cbbteam.html?team=${encodeURIComponent(teamName)}&year=${encodeURIComponent(year)}`;
-
             } else {
                 alert('Please enter a team name');
             }
         }
 
-        // Allow Enter key to trigger search
         document.getElementById('teamSearch').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchTeam();
-            }
+            if (e.key === 'Enter') { searchTeam(); }
         });
-        //document.getElementById('yearSearch').addEventListener('keypress', function(e) {
-            //if (e.key === 'Enter') {
-                //searchTeam();
-            //}
-        //});
-
-
     </script>
 </body>
 </html>

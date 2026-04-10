@@ -2,160 +2,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-0J8DVETW8G"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-0J8DVETW8G');
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Cheesyman.com!</title>
+    <link rel="stylesheet" href="cyberpunk.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-            background-color: #f4f4f4;
+        .cheesy-time {
+            font-family: var(--font-mono);
+            font-size: 15px;
+            color: var(--green);
+            text-shadow: 0 0 10px var(--green), 0 0 20px var(--green-glow);
+            letter-spacing: 0.1em;
+            margin: 24px 0 8px;
         }
-        h1 {
-            color: #333;
+
+        .nav-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 4px;
+            margin: 20px 0 40px;
         }
-        h2 {
-            color: #555;
-            margin-top: 30px;
+
+        .daily-section {
+            max-width: 440px;
+            margin: 0 auto;
         }
-        img {
-            width: 300px;
+
+        .cheese-img {
+            width: 100%;
+            max-width: 400px;
             height: auto;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            margin-top: 20px;
-        }
-        #datetime {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #666;
-        }
-        .button {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 18px;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            text-decoration: none;
-        }
-        .button:hover {
-            opacity: 0.9;
-        }
-        #random-button {
-            background-color: #4caf50;
-        }
-        #random-button:hover {
-            background-color: #3e8e41;
-        }
-        #gallery-button {
-            background-color: #2196f3;
-        }
-        #gallery-button:hover {
-            background-color: #0b7dda;
-        }
-        #sports-button {
-            background-color: #ff5722;
-        }
-        #sports-button:hover {
-            background-color: #e64a19;
-        }
-        .button-container {
-            margin-top: 20px;
-        }
-        .page-footer {
-            text-align: center;
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 3rem;
-            padding: 1rem;
-            background-color: rgba(255, 255, 255, 0.5);
-            border-top: 1px solid #ddd;
+            border-radius: 4px;
+            border: 1px solid var(--orange);
+            box-shadow: 0 0 20px var(--orange-glow), 0 0 60px rgba(255,102,0,0.08);
+            display: block;
+            margin: 16px auto 0;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to Cheesyman.com!</h1>
-    <p>Home of the Cheesyman! The cutest, happiest little boy you'll ever meet. </p>
-    
-    <!-- Date & Time Display -->
-    <p id="datetime">The Cheesy Time is: </p>
+    <div class="neon-bar"></div>
 
-    <!-- Navigation Buttons -->
-    <div class="button-container">
-        <button class="button" id="random-button" onclick="goToRandomPhoto()">Cheesy Surprise</button>
-        <a href="gallery.html" class="button" id="gallery-button">Cheesy Gallery</a>
-        <a href="sports.html" class="button" id="sports-button">Cheesy Sports</a>
-        <a href="/members" class="button" id="sports-button">Members</a>
-    </div>
-    
-    <!-- Daily Cheese Image -->
-    <h2>The Daily Cheese</h2>
-    <img id="daily-cheese-img" src="" alt="Daily Cheese">
-    
-    <script src="cheese-images.js"></script>
-    <script>
-        // Function to update the date & time every second
-        function updateDateTime() {
-            const now = new Date();
-            const options = {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false,
-                timeZoneName: 'short'
-            };
-            document.getElementById("datetime").innerHTML = "<b>The Cheesy Time is: </b>" + now.toLocaleString('en-US', options);
-        }
-        
-        // Update time immediately, then every second
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-        
-        // Get current day of the year (0 - 365)
-        const now = new Date();
-        const start = new Date(now.getFullYear(), 0, 0);
-        const diff = now - start;
-        const oneDay = 1000 * 60 * 60 * 24;
-        const dayOfYear = Math.floor(diff / oneDay);
-        
-        // Select an image based on the day of the year
-        const imageIndex = dayOfYear % images.length;
-        const dailyImageUrl = images[imageIndex];
-        
-        // Display the daily image on this page
-        document.getElementById("daily-cheese-img").src = dailyImageUrl;
-        
-        // Function to navigate to random photo page
-        function goToRandomPhoto() {
-            const randomIndex = Math.floor(Math.random() * images.length);
-            const randomImageUrl = images[randomIndex];
-            localStorage.setItem("randomImage", randomImageUrl);
-            window.location.href = "surprisecheese.html";
-        }
-    </script>
+    <header class="page-header">
+        <div class="header-kicker">cheesyman.com</div>
+        <h1>WELCOME TO CHEESYMAN.COM!</h1>
+        <p class="header-sub">Home of the Cheesyman! The cutest, happiest little boy you'll ever meet.</p>
+    </header>
+
+    <main class="page-wrap" style="text-align:center; padding-top:36px;">
+
+        <p id="datetime" class="cheesy-time"></p>
+
+        <div class="nav-grid">
+            <button class="btn btn-orange" onclick="goToRandomPhoto()">Cheesy Surprise</button>
+            <a href="gallery.html"  class="btn btn-blue">Cheesy Gallery</a>
+            <a href="sports.html"   class="btn btn-orange">Cheesy Sports</a>
+            <a href="/members"      class="btn btn-purple">Members</a>
+        </div>
+
+        <div class="section-label daily-section">daily cheese</div>
+        <div class="daily-section">
+            <img id="daily-cheese-img" src="" alt="Daily Cheese" class="cheese-img">
+        </div>
+
+    </main>
 
     <footer class="page-footer">
         &copy; <span id="currentYear"></span> Cheesyman Inc. All rights reserved.
     </footer>
 
+    <script src="cheese-images.js"></script>
     <script>
-    // Auto-update copyright year
+        function updateDateTime() {
+            const now = new Date();
+            const options = {
+                hour: '2-digit', minute: '2-digit', second: '2-digit',
+                hour12: false, timeZoneName: 'short'
+            };
+            document.getElementById("datetime").innerHTML =
+                "<b>The Cheesy Time is: </b>" + now.toLocaleString('en-US', options);
+        }
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+
+        const now = new Date();
+        const start = new Date(now.getFullYear(), 0, 0);
+        const diff = now - start;
+        const oneDay = 1000 * 60 * 60 * 24;
+        const dayOfYear = Math.floor(diff / oneDay);
+        const imageIndex = dayOfYear % images.length;
+        document.getElementById("daily-cheese-img").src = images[imageIndex];
+
+        function goToRandomPhoto() {
+            const randomIndex = Math.floor(Math.random() * images.length);
+            localStorage.setItem("randomImage", images[randomIndex]);
+            window.location.href = "surprisecheese.html";
+        }
+
         document.getElementById("currentYear").textContent = new Date().getFullYear();
     </script>
 </body>
