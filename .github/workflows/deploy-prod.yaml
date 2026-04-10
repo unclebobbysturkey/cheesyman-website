@@ -41,7 +41,7 @@ jobs:
       run: |
         SERVICES=()
 
-        for svc in cfb_main_app cfb_matchup_app cbb_main_app race_schedule_app; do
+        for svc in cfb_main_app cfb_matchup_app cbb_main_app race_schedule_app members_auth_app; do
           if git diff --name-only HEAD~1 HEAD | grep -q "node/${svc}/"; then
             echo "${svc} changed — syncing"
             rsync -rltvz --delete \
