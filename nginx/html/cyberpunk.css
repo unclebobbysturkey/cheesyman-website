@@ -52,19 +52,6 @@ body {
     background-size: 28px 28px;
 }
 
-/* CRT scan-line overlay */
-body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    background: repeating-linear-gradient(
-        to bottom,
-        transparent, transparent 3px,
-        rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 4px
-    );
-    z-index: 9999;
-}
 
 /* ─── NEON TOP BAR ──────────────────────────────── */
 .neon-bar {
