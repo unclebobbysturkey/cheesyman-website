@@ -14,9 +14,11 @@
 *.exe
 *.msi
 
-#claude.md
+# claude.md
 CLAUDE.md
 
+# healthchecks 
+healthchecks/
 
 #code workspaces
 *.code-workspace
