@@ -1,7 +1,14 @@
 <#
 .DESCRIPTION 
+
+Version 2.1
+
+Added logic to handle events that need to be canceled (API events < DB events)...thanks Middle East
+
+Added healthchecks.io monitoring! Check em out! 
+
 This script is designed to go out and grab schedule data for indy, cup, imsa, and f1 race schedules. It will then connect to the local postgres container and compare
-the desired data to that in the DB. If needed to be updated, then update.
+the desired data to that in the DB. If needed to be updated, then update
 
 Requires SimplySql modules
 
@@ -10,7 +17,8 @@ Install-Module -Name SimplySql
 Requires the Read-Secrets.ps1 to be dot source. Update path as needed! 
 #>
 
-. "$PSScriptRoot\Read-Secrets.ps1" -secretsFile "$PSScriptRoot\.race-secrets"
+. "$PSScriptRoot\Read-Secrets.ps1" -secretsFile "$PSScriptRoot\.secrets"
+$healthUrl = $env:HEALTH_URL
 function Write-Log { # logging function
     [CmdletBinding()]
     param (
@@ -48,11 +56,12 @@ function Get-APIScheduleData { # create a function to use on each serires to get
         Write-Log "There was an error encounter trying to reach the api" -Level Error 
         Write-Log "ERROR: $($_.Exception)"
         Write-Log "Script exiting!"
+        Invoke-WebRequest -Uri "$healthUrl/fail" -Method Post # send fail to healthcheck
         Exit 1
     }
 
     $events = $raw.schedule # traverse in one layer to get the events
-    if ($seriesID -eq '4370') { # filter out the practive and qualifying events from the f1 json
+    if ($seriesID -eq '4370') { # filter out the practice and qualifying events from the f1 json
         $events = $events | Where-Object {$_.strEvent -like "*Grand Prix" -or $_.strEvent -like "*Sprint"}
         $apiData = $events | ForEach-Object {
             [PSCustomObject]@{
@@ -90,11 +99,14 @@ function Get-DBScheduleData {
     } catch {
         Write-Log "There was an error encountered trying to query database" -Level Error
         Write-Log "$_" -Level Error
+        Invoke-WebRequest -Uri "$healthUrl/fail" -Method Post # send fail to healthcheck
+        Exit 1
     }
     
     $dbData = $events | ForEach-Object { # build custom object of desired event data from DB
         [PSCustomObject]@{
             eventID = $_.external_event_id
+            eventName = $_.event_name
             date = $_.event_date
             time = $_.event_time
             status = $_.event_status
@@ -128,11 +140,13 @@ try {
         Write-Log "There is an issues with the DB connection."
         Write-Log "Current connection state: $($connection.State)"
         Write-Log "Script will now exit"
+        Invoke-WebRequest -Uri "$healthUrl/fail" -Method Post # send fail to healthcheck
         Exit 1
     }
 } catch {
     Write-Log "There was an error encountered while connecting the database" -Level Error
     Write-Log "Script will now exit"
+    Invoke-WebRequest -Uri "$healthUrl/fail" -Method Post # send fail to healthcheck
     Exit 1
 }
 
@@ -160,10 +174,25 @@ foreach ($series in $series_id_mappings) {
     # grab DB data
     $eventsDB = Get-DBScheduleData -seriesID "$($series.int_id)"
 
-    if ($eventsDB.Count -ne $eventsAPI.Count) {
-        Write-Log "The number of events in the DB do not match the number coming from the API!" -Level Warning
-    }
+    # reset per-series collections so stale data from a prior iteration doesn't carry over
+    $eventsToCancel = @()
+    $eventsToAdd    = @()
 
+    # check to see if the number of events lines up, check API against DB.
+    if ($eventsDB.Count -ne $eventsAPI.Count) {
+        if ($eventsAPI.Count -lt $eventsDB.Count) { # if DB events are greater, then mark events that need to be "canceled"
+            Write-Log "The number of events in the DB are greater then the events from the API!" -Level Warning
+            Write-Log "Marking extra DB events for removal"
+            $eventsToCancel = $eventsDB | Where-Object {$_.eventID -notin $eventsAPI.eventID}
+        } else { # if DB events are lower, then log it. Will add an event add bit. 
+            Write-Log "The number of events in the DB is less then the events from the API!" -Level Warning
+            Write-Log "Marking missing events from DB for addition"
+            $eventsToAdd = $eventsAPI | Where-Object {$_.eventID -notin $eventsDB.eventID}
+            Write-Log "Below are the events to add:"
+            $eventsToAdd | ForEach-Object {Write-Log "$($_.eventName) needs added to DB"}
+        }
+    }
+    
     $eventsToUpdate = @() # will hold any events needing update
 
     foreach ($eventAPI in $eventsAPI) { # run through each API event
@@ -182,12 +211,33 @@ foreach ($series in $series_id_mappings) {
                 eventName = $eventAPI.eventName
                 newTime = $eventAPI.time
                 newDate = $eventAPI.date
+
             }  
         }
     }
 
+    # update event_status in DB for events that are canceled
+    if ($eventsToCancel.Count -ne 0) {
+        Write-Log "There are events to be canceled!"
+        $eventsToCancel | ForEach-Object {
+            try {
+                if ($_.status -match "Canceled") {
+                    Write-Log "$($_.eventName) status already $($_.status)...skiping DB update"
+                } else {
+                    Write-Log "Updating event_status to Canceled for $($_.eventName)"
+                    Invoke-SqlQuery -Query "UPDATE events SET event_status='Canceled'
+                    WHERE external_event_id=`'$($_.eventID)`'"
+                }
+            } catch {
+                Write-Log "There was an error trying to update event_status for eventID: $($_.eventID)" -Level Error
+                Write-Log "ERROR: $($_.Exception)" -Level Error
+                Invoke-WebRequest -Uri "$healthUrl/log" -Method Post # send log to healthcheck
+            }
+        }
+    }
+
     if ($eventsToUpdate.Count -eq 0) { # if no events to update, move on to the next series. 
-        Write-Log "No events to update for series: $($serie)"
+        Write-Log "No events to update for series: $($series.ext_id)/$($series.int_id)"
         continue 
     }
 
@@ -200,16 +250,17 @@ foreach ($series in $series_id_mappings) {
         }
         catch {
             Write-Log "There was an error trying to update the DB for event: $($_.eventName)" -Level Error
-            Write-Log "$($_.Exception)" -Level Error      
+            Write-Log "$($_.Exception)" -Level Error 
+            Invoke-WebRequest -Uri "$healthUrl/log" -Method Post # send log to healthchec
         }
     }
-
 }
 
 Write-Log "All series has been processed"
 Write-Log "Disconnecting from $db"
-
 Close-SqlConnection
+
+Invoke-WebRequest -Uri "$healthUrl" -Method Post # send success to healthchecks
 
 Exit 
 
