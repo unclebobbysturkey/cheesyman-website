@@ -1,20 +1,22 @@
 <#
 .DESCRIPTION 
 
-Version 2.1
-
-Added logic to handle events that need to be canceled (API events < DB events)...thanks Middle East
-
-Added healthchecks.io monitoring! Check em out! 
-
 This script is designed to go out and grab schedule data for indy, cup, imsa, and f1 race schedules. It will then connect to the local postgres container and compare
-the desired data to that in the DB. If needed to be updated, then update
+the desired data to that in the DB. If needed to be updated, then update. If needing to be removed/canceled. Update event_status to 'Canceled'
 
 Requires SimplySql modules
 
 Install-Module -Name SimplySql
 
 Requires the Read-Secrets.ps1 to be dot source. Update path as needed! 
+
+.NOTES
+
+Version 2.1
+
+Added logic to handle events that need to be canceled (API events < DB events)...thanks Middle East
+
+Added healthchecks.io monitoring! Check em out! 
 #>
 
 . "$PSScriptRoot\Read-Secrets.ps1" -secretsFile "$PSScriptRoot\.secrets"
