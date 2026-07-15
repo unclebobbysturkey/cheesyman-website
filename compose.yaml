@@ -90,8 +90,28 @@ services:
     depends_on:
       - db
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=PROD
       - PORT=${members_auth_app_PORT}
+
+  rsvp_app:
+    build: /home/webmaster/website/node/rsvp_app
+    restart: unless-stopped
+    volumes:
+      - /home/webmaster/website/node/rsvp_app:/app
+      - /app/node_modules
+    env_file:
+      - /home/webmaster/website/node/rsvp_app/.env
+    environment:
+      - NODE_ENV=PROD
+      - PORT=${rsvp_app_PORT}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${POSTGRES_DB}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - ADMIN_PASSWORD=${rsvp_ADMIN_PASSWORD}
+    depends_on:
+      - db
 
   # PostgreSQL database — stores racing data.
   # Init scripts in /home/webmaster/website/init/ run once on first startup (schema, seed data).
