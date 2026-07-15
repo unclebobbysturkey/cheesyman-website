@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AJ's 2nd Birthday — Event Info</title>
+  <link rel="stylesheet" href="cyberpunk.css" />
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .info-wrap {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .info-panel {
+      width: 100%;
+      max-width: 560px;
+    }
+
+    .info-title {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 5vw, 38px);
+      font-weight: 900;
+      text-align: center;
+      color: #fff;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 10px #fff, 0 0 30px var(--orange), 0 0 60px var(--orange-glow);
+      margin-bottom: 6px;
+    }
+
+    .info-event-name {
+      font-family: var(--font-display);
+      font-size: clamp(14px, 3vw, 20px);
+      font-weight: 600;
+      text-align: center;
+      color: var(--orange);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px var(--orange-glow);
+      margin-bottom: 28px;
+    }
+
+    .info-block {
+      margin-bottom: 24px;
+    }
+
+    .info-block .label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--orange);
+      text-shadow: 0 0 6px var(--orange-glow);
+      margin-bottom: 8px;
+    }
+    .info-block .label::before { content: '// '; }
+
+    .info-block .value {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.7;
+      letter-spacing: 0.03em;
+    }
+
+    .info-block .value .highlight {
+      color: var(--green);
+      text-shadow: 0 0 6px var(--green-glow);
+    }
+
+    .placeholder-note {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-faint);
+      letter-spacing: 0.1em;
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 20px 0;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 28px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green);
+      text-decoration: none;
+      text-shadow: 0 0 6px var(--green-glow);
+      transition: text-shadow 0.15s;
+    }
+    .back-link:hover {
+      text-shadow: 0 0 12px var(--green), 0 0 24px var(--green-glow);
+    }
+    .back-link::before { content: '&#8592; '; }
+  </style>
+</head>
+<body>
+  <div class="neon-bar"></div>
+  <div class="info-wrap">
+    <div class="panel panel-orange info-panel">
+      <div class="header-kicker" style="text-align:center; margin-bottom:10px;">Event Details</div>
+      <div class="info-title">AJ's 2nd Birthday</div>
+      <div class="info-event-name">Party Info</div>
+
+      <div class="info-block">
+        <div class="label">Date &amp; Time</div>
+        <div class="value">
+          <span class="highlight">Saturday, [DATE TBD]</span><br/>
+          [TIME TBD]
+        </div>
+        <div class="placeholder-note">// details coming soon</div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="info-block">
+        <div class="label">Location</div>
+        <div class="value">
+          [VENUE NAME TBD]<br/>
+          [ADDRESS TBD]<br/>
+          [CITY, STATE ZIP]
+        </div>
+        <div class="placeholder-note">// details coming soon</div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="info-block">
+        <div class="label">What to Expect</div>
+        <div class="value">
+          [Placeholder — party activities, food, etc. coming soon]
+        </div>
+        <div class="placeholder-note">// details coming soon</div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="info-block">
+        <div class="label">Questions?</div>
+        <div class="value">
+          [CONTACT INFO TBD]
+        </div>
+        <div class="placeholder-note">// details coming soon</div>
+      </div>
+
+      <a class="back-link" href="rsvp.html">Back to RSVP</a>
+    </div>
+  </div>
+</body>
+</html>

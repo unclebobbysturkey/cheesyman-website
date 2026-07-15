@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>You're Invited!</title>
+  <link rel="stylesheet" href="cyberpunk.css" />
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── Code gate ─────────────────────────────────── */
+    #code-gate {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .gate-panel {
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .gate-title {
+      font-family: var(--font-display);
+      font-size: clamp(20px, 4vw, 30px);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 10px #fff, 0 0 30px var(--green), 0 0 60px var(--green-glow);
+      margin-bottom: 6px;
+    }
+
+    .gate-panel p {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      margin-bottom: 24px;
+    }
+    .gate-panel p::before { content: '// '; color: var(--green); }
+
+    .gate-panel input[type="text"] {
+      width: 100%;
+      padding: 10px 14px;
+      font-family: var(--font-mono);
+      font-size: 16px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      text-align: center;
+      color: var(--text);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      margin-bottom: 14px;
+      box-sizing: border-box;
+    }
+    .gate-panel input[type="text"]::placeholder { color: var(--text-faint); }
+    .gate-panel input[type="text"]:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 8px var(--green-glow);
+    }
+
+    .gate-btn {
+      width: 100%;
+      padding: 12px;
+      background: transparent;
+      color: var(--green);
+      border: 1px solid var(--green);
+      border-radius: 2px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px var(--green);
+      cursor: pointer;
+      transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+    }
+    .gate-btn::before { content: '[ '; opacity: 0.6; }
+    .gate-btn::after  { content: ' ]'; opacity: 0.6; }
+    .gate-btn:hover {
+      background: var(--green-glow);
+      box-shadow: 0 0 8px var(--green), 0 0 24px var(--green-glow);
+      transform: translateY(-2px);
+    }
+
+    .gate-error {
+      color: #ff4444;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      margin-top: 12px;
+      display: none;
+    }
+    .gate-error::before { content: '! '; }
+
+    /* ── RSVP form ─────────────────────────────────── */
+    .form-wrap {
+      flex: 1;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    .form-wrap.visible { display: flex; }
+
+    .rsvp-panel {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .rsvp-title {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 5vw, 38px);
+      font-weight: 900;
+      text-align: center;
+      color: #fff;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 10px #fff, 0 0 30px var(--green), 0 0 60px var(--green-glow);
+      margin-bottom: 6px;
+    }
+
+    .rsvp-event-name {
+      font-family: var(--font-display);
+      font-size: clamp(14px, 3vw, 20px);
+      font-weight: 600;
+      text-align: center;
+      color: var(--orange);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px var(--orange-glow);
+      margin-bottom: 10px;
+    }
+
+    .rsvp-subtitle {
+      text-align: center;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      margin-bottom: 28px;
+    }
+    .rsvp-subtitle::before { content: '// '; color: var(--green); }
+
+    .attending-toggle {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .toggle-btn:hover {
+      border-color: var(--text-dim);
+      color: var(--text);
+    }
+
+    .toggle-btn.active-yes {
+      background: var(--green-glow);
+      border-color: var(--green);
+      color: var(--green);
+      text-shadow: 0 0 8px var(--green);
+      box-shadow: 0 0 12px var(--green-glow);
+    }
+
+    .toggle-btn.active-no {
+      background: rgba(223, 0, 255, 0.08);
+      border-color: var(--purple);
+      color: var(--purple);
+      text-shadow: 0 0 8px var(--purple);
+      box-shadow: 0 0 12px var(--purple-glow);
+    }
+
+    .field-group { display: flex; flex-direction: column; gap: 16px; }
+
+    .field-group label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .field-group input,
+    .field-group select {
+      width: 100%;
+      padding: 10px 14px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--text);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .field-group input::placeholder { color: var(--text-faint); }
+    .field-group input:focus,
+    .field-group select:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 8px var(--green-glow);
+    }
+    .field-group select option { background: var(--surface2); }
+
+    .guest-count-field { display: none; }
+    .guest-count-field.visible { display: block; }
+
+    .submit-btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin-top: 24px;
+      background: transparent;
+      color: var(--green);
+      border: 1px solid var(--green);
+      border-radius: 2px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px var(--green);
+      cursor: pointer;
+      transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+    }
+    .submit-btn::before { content: '[ '; opacity: 0.6; }
+    .submit-btn::after  { content: ' ]'; opacity: 0.6; }
+    .submit-btn:hover {
+      background: var(--green-glow);
+      box-shadow: 0 0 8px var(--green), 0 0 24px var(--green-glow);
+      transform: translateY(-2px);
+    }
+    .submit-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+      background: transparent !important;
+    }
+
+    .message {
+      display: none;
+      text-align: center;
+      padding: 14px;
+      border-radius: 2px;
+      margin-top: 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.05em;
+    }
+    .message.success {
+      display: block;
+      background: rgba(0, 255, 65, 0.06);
+      border: 1px solid var(--green);
+      color: var(--green);
+      text-shadow: 0 0 8px var(--green-glow);
+    }
+    .message.error {
+      display: block;
+      background: rgba(255, 68, 68, 0.06);
+      border: 1px solid #ff4444;
+      color: #ff4444;
+    }
+
+    .required { color: var(--orange); text-shadow: 0 0 6px var(--orange-glow); }
+  </style>
+</head>
+<body>
+  <div class="neon-bar"></div>
+
+  <!-- Code Gate -->
+  <div id="code-gate">
+    <div class="panel panel-green gate-panel">
+      <div class="header-kicker" style="text-align:center; margin-bottom:10px;">Private Event</div>
+      <div class="gate-title">You're Invited!</div>
+      <p>enter your invite code to continue</p>
+      <input type="text" id="invite-code" placeholder="XXXXXXX" maxlength="10"
+             onkeydown="if(event.key==='Enter') checkCode()" />
+      <button class="gate-btn" onclick="checkCode()">Enter</button>
+      <p class="gate-error" id="gate-error">Invalid code. Check your invitation.</p>
+    </div>
+  </div>
+
+  <!-- RSVP Form -->
+  <div class="form-wrap" id="form-wrap">
+    <div class="panel panel-green rsvp-panel">
+      <div class="header-kicker" style="text-align:center; margin-bottom:10px;">RSVP</div>
+      <div class="rsvp-title">You're Invited!</div>
+      <div class="rsvp-event-name">AJ's 2nd Birthday</div>
+      <p class="rsvp-subtitle">please confirm your attendance below...thank you</p>
+      <div style="text-align:center; margin-bottom:20px;">
+        <a href="rsvp-info.html" style="font-family:var(--font-mono); font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--orange); text-decoration:none; text-shadow:0 0 6px var(--orange-glow);">&#9658; Event Info &amp; Details</a>
+      </div>
+
+      <div class="section-label">Attending?</div>
+      <div class="attending-toggle">
+        <button class="toggle-btn" id="btn-yes" onclick="setAttending(true)">&#10003; I'll be there!</button>
+        <button class="toggle-btn" id="btn-no"  onclick="setAttending(false)">&#10007; Can't make it</button>
+      </div>
+
+      <div class="section-label">Your Info</div>
+      <div class="field-group">
+        <div>
+          <label for="name">Name <span class="required">*</span></label>
+          <input type="text" id="name" placeholder="your_name" required />
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="you@example.com" />
+        </div>
+        <div>
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" placeholder="(555) 555-5555" />
+        </div>
+        <div class="guest-count-field" id="guest-count-field">
+          <div style="display:flex; gap:16px;">
+            <div style="flex:1;">
+              <label for="adult_count">Adults <span class="required">*</span></label>
+              <select id="adult_count" style="width:100%;">
+                <option value="">select...</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10+</option>
+              </select>
+            </div>
+            <div style="flex:1;">
+              <label for="child_count">Children</label>
+              <select id="child_count" style="width:100%;">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10+</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="submit-btn" id="submit-btn" onclick="submitRSVP()">Send RSVP</button>
+      <div class="message" id="message"></div>
+    </div>
+  </div>
+
+  <script>
+    async function checkCode() {
+      const code   = document.getElementById('invite-code').value.trim();
+      const errEl  = document.getElementById('gate-error');
+      const btn    = document.querySelector('.gate-btn');
+      errEl.style.display = 'none';
+      btn.disabled = true;
+
+      try {
+        const res  = await fetch('/rsvp_api/verify-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code }),
+        });
+        const data = await res.json();
+
+        if (data.valid) {
+          document.getElementById('code-gate').style.display = 'none';
+          document.getElementById('form-wrap').classList.add('visible');
+        } else {
+          errEl.style.display = 'block';
+          document.getElementById('invite-code').value = '';
+          document.getElementById('invite-code').focus();
+        }
+      } catch {
+        errEl.textContent = 'Network error. Please try again.';
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    let attending = null;
+
+    function setAttending(value) {
+      attending = value;
+      document.getElementById('btn-yes').className = 'toggle-btn' + (value ? ' active-yes' : '');
+      document.getElementById('btn-no').className  = 'toggle-btn' + (!value ? ' active-no' : '');
+      document.getElementById('guest-count-field').className = 'guest-count-field' + (value ? ' visible' : '');
+    }
+
+    async function submitRSVP() {
+      const name        = document.getElementById('name').value.trim();
+      const email       = document.getElementById('email').value.trim();
+      const phone       = document.getElementById('phone').value.trim();
+      const adult_count = parseInt(document.getElementById('adult_count').value);
+      const child_count = parseInt(document.getElementById('child_count').value) || 0;
+      const msgEl       = document.getElementById('message');
+
+      msgEl.className = 'message';
+      msgEl.textContent = '';
+
+      if (attending === null) return showMsg('Please select whether you can attend.', false);
+      if (!name)             return showMsg('Please enter your name.', false);
+      if (attending && !adult_count) return showMsg('Please select number of adults.', false);
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      try {
+        const res = await fetch('/rsvp_api/rsvp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, phone, adult_count, child_count, attending }),
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          showMsg(attending
+            ? `CONFIRMED: We can't wait to see you, ${name}!`
+            : `NOTED: Thanks for letting us know, ${name}. We'll miss you!`, true);
+          btn.style.display = 'none';
+        } else {
+          showMsg(data.error || 'Something went wrong. Please try again.', false);
+          btn.disabled = false;
+          btn.textContent = 'Send RSVP';
+        }
+      } catch (err) {
+        showMsg('Network error. Please try again.', false);
+        btn.disabled = false;
+        btn.textContent = 'Send RSVP';
+      }
+    }
+
+    function showMsg(text, success) {
+      const el = document.getElementById('message');
+      el.className = 'message ' + (success ? 'success' : 'error');
+      el.textContent = text;
+    }
+  </script>
+</body>
+</html>
