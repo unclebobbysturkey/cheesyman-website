@@ -10,6 +10,197 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Scanlines ─────────────────────────────────── */
+    .scanlines {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.04) 2px,
+        rgba(0, 0, 0, 0.04) 4px
+      );
+    }
+
+    /* ── Dino chase scene ───────────────────────────── */
+    .dino-chase {
+      position: fixed;
+      bottom: 0;
+      left: -200px;
+      z-index: 10;
+      animation: chaseRun 16s linear infinite;
+    }
+
+    /* ground line under the chase */
+    .chase-ground {
+      position: fixed;
+      bottom: 10px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      z-index: 9;
+      background: repeating-linear-gradient(90deg,
+        var(--green) 0px, var(--green) 4px,
+        transparent 4px, transparent 8px);
+      box-shadow: 0 0 4px var(--green-glow);
+      opacity: 0.4;
+    }
+
+    /* Big T-Rex — the chaser (5px grid for better detail) */
+    .trex {
+      position: absolute;
+      left: 0;
+      bottom: 14px;
+      width: 5px;
+      height: 5px;
+      background: transparent;
+      /* origin pixel is at the mid-body; everything built relative */
+      box-shadow:
+        /* ── HEAD (open jaw) ── */
+        25px -30px 0 var(--green),
+        30px -30px 0 var(--green),
+        35px -30px 0 var(--green),
+        40px -30px 0 var(--green),
+        45px -30px 0 var(--green),
+        20px -25px 0 var(--green),
+        25px -25px 0 var(--green),
+        30px -25px 0 var(--green),
+        35px -25px 0 var(--green),
+        40px -25px 0 var(--green),
+        45px -25px 0 var(--green),
+        /* eye */
+        40px -30px 0 #ff0000,
+        /* jaw top row */
+        30px -20px 0 var(--green),
+        35px -20px 0 var(--green),
+        40px -20px 0 var(--green),
+        45px -20px 0 var(--green),
+        /* teeth (gap then lower jaw) */
+        45px -15px 0 var(--green),
+        40px -15px 0 var(--green),
+        35px -15px 0 var(--green),
+        30px -15px 0 var(--green),
+        35px -10px 0 var(--green),
+        40px -10px 0 var(--green),
+        45px -10px 0 var(--green),
+        /* ── NECK ── */
+        20px -20px 0 var(--green),
+        20px -15px 0 var(--green),
+        15px -15px 0 var(--green),
+        15px -10px 0 var(--green),
+        /* ── BODY ── */
+        5px -5px 0 var(--green),
+        10px -5px 0 var(--green),
+        15px -5px 0 var(--green),
+        20px -5px 0 var(--green),
+        0px 0px 0 var(--green),
+        5px 0px 0 var(--green),
+        10px 0px 0 var(--green),
+        15px 0px 0 var(--green),
+        20px 0px 0 var(--green),
+        0px 5px 0 var(--green),
+        5px 5px 0 var(--green),
+        10px 5px 0 var(--green),
+        15px 5px 0 var(--green),
+        20px 5px 0 var(--green),
+        5px 10px 0 var(--green),
+        10px 10px 0 var(--green),
+        15px 10px 0 var(--green),
+        /* ── TINY ARMS ── */
+        25px -5px 0 var(--green),
+        25px 0px 0 var(--green),
+        30px 0px 0 var(--green),
+        /* ── TAIL ── */
+        -5px -5px 0 var(--green),
+        -10px -10px 0 var(--green),
+        -15px -15px 0 var(--green),
+        -20px -20px 0 var(--green),
+        -25px -25px 0 var(--green),
+        -5px 0px 0 var(--green),
+        -10px -5px 0 var(--green),
+        -15px -10px 0 var(--green),
+        -20px -15px 0 var(--green),
+        /* ── LEFT LEG ── */
+        5px 15px 0 var(--green),
+        5px 20px 0 var(--green),
+        5px 25px 0 var(--green),
+        0px 25px 0 var(--green),
+        10px 25px 0 var(--green),
+        /* ── RIGHT LEG ── */
+        15px 15px 0 var(--green),
+        15px 20px 0 var(--green),
+        15px 25px 0 var(--green),
+        10px 25px 0 var(--green),
+        20px 25px 0 var(--green);
+      filter: drop-shadow(0 0 6px var(--green-glow));
+      animation: dinoStep 0.35s steps(2) infinite;
+    }
+
+    /* Small prey dino — running ahead (purple, scared!) */
+    .prey-dino {
+      position: absolute;
+      left: 130px;
+      bottom: 18px;
+      width: 4px;
+      height: 4px;
+      background: transparent;
+      box-shadow:
+        /* head */
+        16px -12px 0 var(--purple),
+        20px -12px 0 var(--purple),
+        20px -16px 0 var(--purple),
+        24px -16px 0 var(--purple),
+        24px -12px 0 var(--purple),
+        /* eye */
+        24px -16px 0 var(--orange),
+        /* neck */
+        12px -8px 0 var(--purple),
+        16px -8px 0 var(--purple),
+        /* body */
+        0px -4px 0 var(--purple),
+        4px -4px 0 var(--purple),
+        8px -4px 0 var(--purple),
+        12px -4px 0 var(--purple),
+        0px 0px 0 var(--purple),
+        4px 0px 0 var(--purple),
+        8px 0px 0 var(--purple),
+        12px 0px 0 var(--purple),
+        4px 4px 0 var(--purple),
+        8px 4px 0 var(--purple),
+        /* tail */
+        -4px 0px 0 var(--purple),
+        -8px 4px 0 var(--purple),
+        -12px 8px 0 var(--purple),
+        /* legs */
+        4px 8px 0 var(--purple),
+        4px 12px 0 var(--purple),
+        0px 12px 0 var(--purple),
+        8px 8px 0 var(--purple),
+        8px 12px 0 var(--purple),
+        12px 12px 0 var(--purple);
+      filter: drop-shadow(0 0 5px var(--purple-glow));
+      animation: preyStep 0.25s steps(2) infinite;
+    }
+
+    @keyframes chaseRun {
+      0%   { left: -200px; }
+      100% { left: calc(100vw + 200px); }
+    }
+    @keyframes dinoStep {
+      0%   { transform: translateY(0); }
+      50%  { transform: translateY(-3px); }
+      100% { transform: translateY(0); }
+    }
+    @keyframes preyStep {
+      0%   { transform: translateY(0); }
+      50%  { transform: translateY(-4px); }
+      100% { transform: translateY(0); }
     }
 
     /* ── Code gate ─────────────────────────────────── */
@@ -289,12 +480,19 @@
 </head>
 <body>
   <div class="neon-bar"></div>
+  <div class="scanlines"></div>
+  <div class="chase-ground"></div>
+  <div class="dino-chase">
+    <div class="trex"></div>
+    <div class="prey-dino"></div>
+  </div>
 
   <!-- Code Gate -->
   <div id="code-gate">
     <div class="panel panel-green gate-panel">
       <div class="header-kicker" style="text-align:center; margin-bottom:10px;">Private Event</div>
       <div class="gate-title">You're Invited!</div>
+      <div style="font-family:var(--font-display); font-size:clamp(10px,2.5vw,13px); text-align:center; color:var(--purple); letter-spacing:0.15em; text-transform:uppercase; text-shadow:0 0 8px var(--purple-glow); margin-bottom:14px;">Cruisin' 2 the Prehistoric</div>
       <p>enter your invite code to continue</p>
       <input type="text" id="invite-code" placeholder="XXXXXXX" maxlength="10"
              onkeydown="if(event.key==='Enter') checkCode()" />
@@ -309,6 +507,7 @@
       <div class="header-kicker" style="text-align:center; margin-bottom:10px;">RSVP</div>
       <div class="rsvp-title">You're Invited!</div>
       <div class="rsvp-event-name">AJ's 2nd Birthday</div>
+      <div style="font-family:var(--font-display); font-size:clamp(10px,2.5vw,13px); text-align:center; color:var(--purple); letter-spacing:0.15em; text-transform:uppercase; text-shadow:0 0 8px var(--purple-glow); margin-bottom:6px;">Cruisin' 2 the Prehistoric</div>
       <p class="rsvp-subtitle">please confirm your attendance below...thank you</p>
       <div style="text-align:center; margin-bottom:20px;">
         <a href="rsvp-info.html" style="font-family:var(--font-mono); font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--orange); text-decoration:none; text-shadow:0 0 6px var(--orange-glow);">&#9658; Event Info &amp; Details</a>

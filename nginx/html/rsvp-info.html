@@ -10,6 +10,7 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
     .info-wrap {
@@ -18,11 +19,14 @@
       align-items: flex-start;
       justify-content: center;
       padding: 40px 20px;
+      position: relative;
     }
 
     .info-panel {
       width: 100%;
       max-width: 560px;
+      position: relative;
+      z-index: 2;
     }
 
     .info-title {
@@ -41,12 +45,25 @@
       font-size: clamp(14px, 3vw, 20px);
       font-weight: 600;
       text-align: center;
-      color: var(--orange);
+      color: var(--green);
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      text-shadow: 0 0 10px var(--orange-glow);
+      text-shadow: 0 0 10px var(--green-glow);
+      margin-bottom: 6px;
+    }
+
+    .info-theme {
+      font-family: var(--font-mono);
+      font-size: clamp(11px, 2.5vw, 14px);
+      text-align: center;
+      color: var(--purple);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px var(--purple-glow);
       margin-bottom: 28px;
     }
+    .info-theme::before { content: '[ '; opacity: 0.6; }
+    .info-theme::after  { content: ' ]'; opacity: 0.6; }
 
     .info-block {
       margin-bottom: 24px;
@@ -76,13 +93,47 @@
       text-shadow: 0 0 6px var(--green-glow);
     }
 
-    .placeholder-note {
+    .info-block .value .venue-name {
+      color: var(--blue);
+      text-shadow: 0 0 6px var(--blue-glow);
+      font-weight: 600;
+    }
+
+    .venue-link {
+      display: inline-block;
+      margin-top: 6px;
       font-family: var(--font-mono);
       font-size: 11px;
-      color: var(--text-faint);
       letter-spacing: 0.1em;
-      font-style: italic;
-      margin-top: 4px;
+      color: var(--blue);
+      text-decoration: none;
+      text-shadow: 0 0 6px var(--blue-glow);
+      transition: text-shadow 0.15s;
+    }
+    .venue-link:hover {
+      text-shadow: 0 0 12px var(--blue), 0 0 24px var(--blue-glow);
+    }
+    .venue-link::before { content: '> '; }
+
+    .info-list {
+      list-style: none;
+      padding: 0;
+    }
+    .info-list li {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.8;
+      letter-spacing: 0.03em;
+      padding-left: 18px;
+      position: relative;
+    }
+    .info-list li::before {
+      content: '\25B8';
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      text-shadow: 0 0 6px var(--green-glow);
     }
 
     .divider {
@@ -107,24 +158,288 @@
     .back-link:hover {
       text-shadow: 0 0 12px var(--green), 0 0 24px var(--green-glow);
     }
-    .back-link::before { content: '&#8592; '; }
+    .back-link::before { content: '\2190 '; }
+
+    /* ── DINO SCENE ──────────────────────────────────── */
+    .dino-scene {
+      position: relative;
+      width: 100%;
+      max-width: 560px;
+      height: 80px;
+      margin: 0 auto 10px;
+      overflow: hidden;
+    }
+
+    /* pixel-art ground line */
+    .dino-ground {
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      width: 200%;
+      height: 2px;
+      background: repeating-linear-gradient(90deg,
+        var(--green) 0px, var(--green) 6px,
+        transparent 6px, transparent 10px);
+      box-shadow: 0 0 6px var(--green-glow);
+      animation: groundScroll 4s linear infinite;
+    }
+    @keyframes groundScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* CSS pixel dinos — 8-bit T-Rex style */
+    .pixel-dino {
+      position: absolute;
+      bottom: 12px;
+      image-rendering: pixelated;
+    }
+
+    /* Big T-Rex — detailed with open jaw, tiny arms, thick tail */
+    .dino-1 {
+      left: 6%;
+      width: 5px;
+      height: 5px;
+      background: transparent;
+      box-shadow:
+        /* ── HEAD (open jaw) ── */
+        25px -30px 0 var(--green),
+        30px -30px 0 var(--green),
+        35px -30px 0 var(--green),
+        40px -30px 0 var(--green),
+        45px -30px 0 var(--green),
+        20px -25px 0 var(--green),
+        25px -25px 0 var(--green),
+        30px -25px 0 var(--green),
+        35px -25px 0 var(--green),
+        40px -25px 0 var(--green),
+        45px -25px 0 var(--green),
+        /* eye */
+        40px -30px 0 #ff0000,
+        /* jaw top */
+        30px -20px 0 var(--green),
+        35px -20px 0 var(--green),
+        40px -20px 0 var(--green),
+        45px -20px 0 var(--green),
+        /* teeth gap + lower jaw */
+        45px -15px 0 var(--green),
+        40px -15px 0 var(--green),
+        35px -15px 0 var(--green),
+        30px -15px 0 var(--green),
+        35px -10px 0 var(--green),
+        40px -10px 0 var(--green),
+        45px -10px 0 var(--green),
+        /* ── NECK ── */
+        20px -20px 0 var(--green),
+        20px -15px 0 var(--green),
+        15px -15px 0 var(--green),
+        15px -10px 0 var(--green),
+        /* ── BODY ── */
+        5px -5px 0 var(--green),
+        10px -5px 0 var(--green),
+        15px -5px 0 var(--green),
+        20px -5px 0 var(--green),
+        0px 0px 0 var(--green),
+        5px 0px 0 var(--green),
+        10px 0px 0 var(--green),
+        15px 0px 0 var(--green),
+        20px 0px 0 var(--green),
+        0px 5px 0 var(--green),
+        5px 5px 0 var(--green),
+        10px 5px 0 var(--green),
+        15px 5px 0 var(--green),
+        20px 5px 0 var(--green),
+        5px 10px 0 var(--green),
+        10px 10px 0 var(--green),
+        15px 10px 0 var(--green),
+        /* ── TINY ARMS ── */
+        25px -5px 0 var(--green),
+        25px 0px 0 var(--green),
+        30px 0px 0 var(--green),
+        /* ── TAIL ── */
+        -5px -5px 0 var(--green),
+        -10px -10px 0 var(--green),
+        -15px -15px 0 var(--green),
+        -20px -20px 0 var(--green),
+        -25px -25px 0 var(--green),
+        -5px 0px 0 var(--green),
+        -10px -5px 0 var(--green),
+        -15px -10px 0 var(--green),
+        -20px -15px 0 var(--green),
+        /* ── LEFT LEG ── */
+        5px 15px 0 var(--green),
+        5px 20px 0 var(--green),
+        5px 25px 0 var(--green),
+        0px 25px 0 var(--green),
+        10px 25px 0 var(--green),
+        /* ── RIGHT LEG ── */
+        15px 15px 0 var(--green),
+        15px 20px 0 var(--green),
+        15px 25px 0 var(--green),
+        10px 25px 0 var(--green),
+        20px 25px 0 var(--green);
+      filter: drop-shadow(0 0 6px var(--green-glow));
+      animation: dinoWalk 0.4s steps(2) infinite;
+    }
+
+    /* Small prey dino — purple, running scared */
+    .dino-2 {
+      right: 8%;
+      width: 4px;
+      height: 4px;
+      background: transparent;
+      box-shadow:
+        /* head */
+        16px -12px 0 var(--purple),
+        20px -12px 0 var(--purple),
+        20px -16px 0 var(--purple),
+        24px -16px 0 var(--purple),
+        24px -12px 0 var(--purple),
+        /* eye */
+        24px -16px 0 var(--orange),
+        /* neck */
+        12px -8px 0 var(--purple),
+        16px -8px 0 var(--purple),
+        /* body */
+        0px -4px 0 var(--purple),
+        4px -4px 0 var(--purple),
+        8px -4px 0 var(--purple),
+        12px -4px 0 var(--purple),
+        0px 0px 0 var(--purple),
+        4px 0px 0 var(--purple),
+        8px 0px 0 var(--purple),
+        12px 0px 0 var(--purple),
+        4px 4px 0 var(--purple),
+        8px 4px 0 var(--purple),
+        /* tail */
+        -4px 0px 0 var(--purple),
+        -8px 4px 0 var(--purple),
+        -12px 8px 0 var(--purple),
+        /* legs */
+        4px 8px 0 var(--purple),
+        4px 12px 0 var(--purple),
+        0px 12px 0 var(--purple),
+        8px 8px 0 var(--purple),
+        8px 12px 0 var(--purple),
+        12px 12px 0 var(--purple);
+      filter: drop-shadow(0 0 5px var(--purple-glow));
+      animation: dinoWalk 0.3s steps(2) infinite;
+    }
+
+    @keyframes dinoWalk {
+      0%   { transform: translateY(0); }
+      50%  { transform: translateY(-2px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* cactus obstacles — arcade style */
+    .cactus {
+      position: absolute;
+      bottom: 10px;
+      width: 3px;
+      height: 18px;
+      background: var(--orange);
+      box-shadow: 0 0 4px var(--orange-glow);
+      animation: cactusMove 6s linear infinite;
+    }
+    .cactus::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: -5px;
+      width: 3px;
+      height: 8px;
+      background: var(--orange);
+      box-shadow: 0 0 4px var(--orange-glow);
+    }
+    .cactus::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      right: -5px;
+      width: 3px;
+      height: 6px;
+      background: var(--orange);
+      box-shadow: 0 0 4px var(--orange-glow);
+    }
+    .cactus-1 { right: -20px; animation-delay: 0s; }
+    .cactus-2 { right: -20px; animation-delay: 3s; }
+
+    @keyframes cactusMove {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(calc(-100vw - 40px)); }
+    }
+
+    /* scanline overlay for retro CRT feel */
+    .scanlines {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.04) 2px,
+        rgba(0, 0, 0, 0.04) 4px
+      );
+    }
+
+    /* score display — 80s arcade flair */
+    .score-display {
+      font-family: var(--font-display);
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--amber);
+      text-shadow: 0 0 6px var(--amber-glow);
+      text-align: right;
+      margin-bottom: 4px;
+    }
+
+    /* blinking INSERT COIN text */
+    .insert-coin {
+      font-family: var(--font-display);
+      font-size: 10px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--amber);
+      text-shadow: 0 0 8px var(--amber-glow);
+      text-align: center;
+      margin-top: 16px;
+      animation: coinBlink 1.2s step-start infinite;
+    }
+    @keyframes coinBlink { 0%,100%{opacity:1} 50%{opacity:0} }
   </style>
 </head>
 <body>
   <div class="neon-bar"></div>
+  <div class="scanlines"></div>
+
   <div class="info-wrap">
     <div class="panel panel-orange info-panel">
+
+      <div class="score-display">HI 999999 &nbsp; 1UP 002600</div>
+
+      <!-- Dino runner scene -->
+      <div class="dino-scene">
+        <div class="pixel-dino dino-1"></div>
+        <div class="pixel-dino dino-2"></div>
+        <div class="cactus cactus-1"></div>
+        <div class="cactus cactus-2"></div>
+        <div class="dino-ground"></div>
+      </div>
+
       <div class="header-kicker" style="text-align:center; margin-bottom:10px;">Event Details</div>
       <div class="info-title">AJ's 2nd Birthday</div>
-      <div class="info-event-name">Party Info</div>
+      <div class="info-event-name">Cruisin' 2 the Prehistoric</div>
+      <div class="info-theme">Dino Arcade Party</div>
 
       <div class="info-block">
         <div class="label">Date &amp; Time</div>
         <div class="value">
-          <span class="highlight">Saturday, [DATE TBD]</span><br/>
-          [TIME TBD]
+          <span class="highlight">Saturday, August 14, 2027</span><br/>
+          Party time TBD
         </div>
-        <div class="placeholder-note">// details coming soon</div>
       </div>
 
       <hr class="divider" />
@@ -132,21 +447,24 @@
       <div class="info-block">
         <div class="label">Location</div>
         <div class="value">
-          [VENUE NAME TBD]<br/>
-          [ADDRESS TBD]<br/>
-          [CITY, STATE ZIP]
+          <span class="venue-name">Smiley Indianapolis</span><br/>
+          5729 E. 86th St.<br/>
+          Indianapolis, IN 46250
         </div>
-        <div class="placeholder-note">// details coming soon</div>
+        <a class="venue-link" href="https://www.smileyindianapolis.com/" target="_blank" rel="noopener">smileyindianapolis.com — venue info &amp; directions</a>
       </div>
 
       <hr class="divider" />
 
       <div class="info-block">
         <div class="label">What to Expect</div>
-        <div class="value">
-          [Placeholder — party activities, food, etc. coming soon]
-        </div>
-        <div class="placeholder-note">// details coming soon</div>
+        <ul class="info-list">
+          <li>2 hours of access to ball pit and play area for the kids</li>
+          <li>Large arcade available to entertain both kids and adults</li>
+          <li>Pizza will be provided; more food available for purchase</li>
+          <li>Dessert will be served</li>
+          <li>Dino-themed fun for the whole family</li>
+        </ul>
       </div>
 
       <hr class="divider" />
@@ -154,10 +472,11 @@
       <div class="info-block">
         <div class="label">Questions?</div>
         <div class="value">
-          [CONTACT INFO TBD]
+          Reach out to us directly &mdash; contact info on your invitation.
         </div>
-        <div class="placeholder-note">// details coming soon</div>
       </div>
+
+      <div class="insert-coin">&#9654; Insert Coin to Continue &#9664;</div>
 
       <a class="back-link" href="rsvp.html">Back to RSVP</a>
     </div>
