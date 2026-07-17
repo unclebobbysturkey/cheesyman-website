@@ -476,6 +476,35 @@
     }
 
     .required { color: var(--orange); text-shadow: 0 0 6px var(--orange-glow); }
+
+    /* ── CHEESYMAN LINK ──────────────────────────────── */
+    .cheesyman-link {
+      display: block;
+      text-align: center;
+      margin-top: 18px;
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--amber);
+      text-decoration: none;
+      animation: cheesyPulse 1.5s ease-in-out infinite;
+    }
+    .cheesyman-link:hover {
+      color: #fff;
+      text-shadow: 0 0 10px #fff, 0 0 30px var(--amber), 0 0 60px var(--amber-glow);
+    }
+    @keyframes cheesyPulse {
+      0%, 100% {
+        text-shadow: 0 0 6px var(--amber-glow), 0 0 12px var(--amber-glow);
+        opacity: 1;
+      }
+      50% {
+        text-shadow: 0 0 16px var(--amber), 0 0 40px var(--amber-glow), 0 0 60px var(--amber);
+        opacity: 0.6;
+      }
+    }
   </style>
 </head>
 <body>
@@ -498,6 +527,7 @@
              onkeydown="if(event.key==='Enter') checkCode()" />
       <button class="gate-btn" onclick="checkCode()">Enter</button>
       <p class="gate-error" id="gate-error">Invalid code. Check your invitation.</p>
+      <a class="cheesyman-link" href="https://cheesyman.com">&#127880; cheesyman.com &#127880;</a>
     </div>
   </div>
 
@@ -575,6 +605,7 @@
 
       <button class="submit-btn" id="submit-btn" onclick="submitRSVP()">Send RSVP</button>
       <div class="message" id="message"></div>
+      <a class="cheesyman-link" href="https://cheesyman.com">&#127880; cheesyman.com &#127880;</a>
     </div>
   </div>
 
