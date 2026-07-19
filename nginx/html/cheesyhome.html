@@ -82,7 +82,6 @@
         &copy; <span id="currentYear"></span> Cheesyman Inc. All rights reserved.
     </footer>
 
-    <script src="cheese-images.js"></script>
     <script>
         function updateDateTime() {
             const now = new Date();
@@ -96,15 +95,24 @@
         updateDateTime();
         setInterval(updateDateTime, 1000);
 
-        const now = new Date();
-        const start = new Date(now.getFullYear(), 0, 0);
-        const diff = now - start;
-        const oneDay = 1000 * 60 * 60 * 24;
-        const dayOfYear = Math.floor(diff / oneDay);
-        const imageIndex = dayOfYear % images.length;
-        document.getElementById("daily-cheese-img").src = images[imageIndex];
+        let images = [];
+
+        fetch('/image_api/images')
+            .then(res => res.json())
+            .then(data => {
+                images = data;
+                const now = new Date();
+                const start = new Date(now.getFullYear(), 0, 0);
+                const diff = now - start;
+                const oneDay = 1000 * 60 * 60 * 24;
+                const dayOfYear = Math.floor(diff / oneDay);
+                const imageIndex = dayOfYear % images.length;
+                document.getElementById("daily-cheese-img").src = images[imageIndex];
+            })
+            .catch(err => console.error('Failed to load cheese images:', err));
 
         function goToRandomPhoto() {
+            if (images.length === 0) return;
             const randomIndex = Math.floor(Math.random() * images.length);
             localStorage.setItem("randomImage", images[randomIndex]);
             window.location.href = "surprisecheese.html";
