@@ -113,6 +113,21 @@ services:
     depends_on:
       - db
 
+  # Image URL app — serves presigned Cloudflare R2 URLs for cheese photos.
+  # Route: GET /image_api/images  |  Port 3007
+  image_url_app:
+    build: /home/webmaster/website/node/image_url_app
+    volumes:
+      - /home/webmaster/website/node/image_url_app:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=PROD
+      - PORT=${image_url_app_PORT}
+      - R2_ACCOUNT_ID=${R2_ACCOUNT_ID}
+      - R2_ACCESS_KEY_ID=${R2_ACCESS_KEY_ID}
+      - R2_SECRET_ACCESS_KEY=${R2_SECRET_ACCESS_KEY}
+      - R2_BUCKET_NAME=${R2_BUCKET_NAME}
+
   # PostgreSQL database — stores racing data.
   # Init scripts in /home/webmaster/website/init/ run once on first startup (schema, seed data).
   db:
