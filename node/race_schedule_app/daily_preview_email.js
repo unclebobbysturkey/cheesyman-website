@@ -1,9 +1,10 @@
 // this script is desinged to run daily
+// new comment
 
 require('dotenv').config(); // dotenv file
 const transporter = require('./mail'); // import mail.js
 const { Pool } = require('pg'); // import postgres module, place as an object Pool
-const { images } = require('./cheese-images.js')
+const IMAGE_API_URL = process.env.IMAGE_API_URL || 'http://image_url_app:3007/image_api/images';
 
 const pool = new Pool({ // setup the connection variables for the db
     host: process.env.DB_HOST,
@@ -68,7 +69,9 @@ async function getDailySchedule (slug, today_date) {
     }
 }
 
-function getDailyCheese() { // grab a random cheese
+async function getDailyCheese() { // grab a random cheese from R2 via image_url_app
+    const res = await fetch(IMAGE_API_URL);
+    const images = await res.json();
     const randomIndex = Math.floor(Math.random() * images.length);
     return images[randomIndex];
 }
@@ -79,7 +82,7 @@ async function sendDailyPreview() {
 
     const seriesList = await getSeries();
 
-    const url = getDailyCheese();
+    const url = await getDailyCheese();
 
 
     let htmlBody = `
