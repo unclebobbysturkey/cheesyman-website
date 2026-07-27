@@ -12,94 +12,8 @@
       min-height: 100vh;
     }
 
-    /* ── Login ────────────────────────────────────── */
-    #login-screen {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 20px;
-    }
-
-    .login-panel {
-      width: 100%;
-      max-width: 360px;
-      text-align: center;
-    }
-
-    .login-panel .login-title {
-      font-family: var(--font-display);
-      font-size: clamp(20px, 4vw, 30px);
-      font-weight: 900;
-      color: #fff;
-      letter-spacing: 0.08em;
-      text-shadow: 0 0 10px #fff, 0 0 30px var(--orange), 0 0 60px var(--orange-glow);
-      margin-bottom: 6px;
-    }
-
-    .login-panel p {
-      color: var(--text-dim);
-      font-family: var(--font-mono);
-      font-size: 12px;
-      letter-spacing: 0.1em;
-      margin-bottom: 24px;
-    }
-    .login-panel p::before { content: '// '; color: var(--orange); }
-
-    .login-panel input[type="password"] {
-      width: 100%;
-      padding: 10px 14px;
-      font-family: var(--font-mono);
-      font-size: 14px;
-      color: var(--text);
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-      margin-bottom: 14px;
-    }
-    .login-panel input[type="password"]::placeholder { color: var(--text-faint); }
-    .login-panel input[type="password"]:focus {
-      border-color: var(--orange);
-      box-shadow: 0 0 8px var(--orange-glow);
-    }
-
-    .login-btn {
-      width: 100%;
-      padding: 12px;
-      background: transparent;
-      color: var(--orange);
-      border: 1px solid var(--orange);
-      border-radius: 2px;
-      font-family: var(--font-mono);
-      font-size: 13px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-shadow: 0 0 8px var(--orange);
-      cursor: pointer;
-      transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
-    }
-    .login-btn::before { content: '[ '; opacity: 0.6; }
-    .login-btn::after  { content: ' ]'; opacity: 0.6; }
-    .login-btn:hover {
-      background: var(--orange-glow);
-      box-shadow: 0 0 8px var(--orange), 0 0 24px var(--orange-glow);
-      transform: translateY(-2px);
-    }
-
-    .login-error {
-      color: #ff4444;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      margin-top: 12px;
-      display: none;
-    }
-    .login-error::before { content: '! '; }
-
     /* ── Dashboard ────────────────────────────────── */
-    #dashboard { display: none; padding: 32px 24px; max-width: 960px; margin: 0 auto; width: 100%; }
+    #dashboard { padding: 32px 24px; max-width: 960px; margin: 0 auto; width: 100%; }
 
     .dash-header {
       display: flex;
@@ -307,18 +221,6 @@
 <body>
   <div class="neon-bar"></div>
 
-  <!-- Login -->
-  <div id="login-screen">
-    <div class="panel panel-orange login-panel">
-      <div class="header-kicker" style="text-align:center; margin-bottom:10px;">Restricted Access</div>
-      <div class="login-title">RSVP Admin</div>
-      <p>enter your password to view guest list</p>
-      <input type="password" id="password" placeholder="password" onkeydown="if(event.key==='Enter') login()" />
-      <button class="login-btn" onclick="login()">Sign In</button>
-      <p class="login-error" id="login-error">Incorrect password.</p>
-    </div>
-  </div>
-
   <!-- Dashboard -->
   <div id="dashboard">
     <div class="dash-header">
@@ -326,7 +228,7 @@
         <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.3em;color:var(--orange);text-transform:uppercase;text-shadow:0 0 8px var(--orange);margin-bottom:4px;">&gt; ADMIN PANEL</div>
         <div class="dash-title">Guest List</div>
       </div>
-      <button class="logout-btn" onclick="logout()">Sign Out</button>
+      <a href="/auth/logout" class="logout-btn" style="text-decoration:none;">Sign Out</a>
     </div>
 
     <div class="stat-grid">
@@ -379,45 +281,25 @@
   <script>
     let allRsvps = [];
     let currentFilter = 'all';
-    let adminPassword = '';
 
-    async function login() {
-      const pw = document.getElementById('password').value;
-      const errEl = document.getElementById('login-error');
-      errEl.style.display = 'none';
-
+    document.addEventListener('DOMContentLoaded', async () => {
       try {
-        const res = await fetch(`/rsvp_api/admin?password=${encodeURIComponent(pw)}`);
-        const data = await res.json();
-
+        const res = await fetch('/rsvp_api/admin');
         if (!res.ok) {
-          errEl.style.display = 'block';
+          window.location.href = '/auth/login?returnTo=/rsvp-admin';
           return;
         }
-
-        adminPassword = pw;
+        const data = await res.json();
         allRsvps = data.rsvps;
         document.getElementById('stat-total').textContent     = data.total_rsvps;
         document.getElementById('stat-attending').textContent = data.total_attending;
         document.getElementById('stat-declined').textContent  = data.total_declined;
         document.getElementById('stat-guests').textContent    = data.total_guests;
-
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
         renderTable();
       } catch (err) {
-        errEl.textContent = 'Network error. Please try again.';
-        errEl.style.display = 'block';
+        console.error('Failed to load RSVP data:', err);
       }
-    }
-
-    function logout() {
-      adminPassword = '';
-      allRsvps = [];
-      document.getElementById('password').value = '';
-      document.getElementById('login-screen').style.display = 'flex';
-      document.getElementById('dashboard').style.display = 'none';
-    }
+    });
 
     function setFilter(filter, btn) {
       currentFilter = filter;
