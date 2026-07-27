@@ -56,14 +56,8 @@ app.post('/rsvp_api/rsvp', async (req, res) => {
   }
 });
 
-// GET /rsvp_api/admin — fetch all RSVPs (password protected)
+// GET /rsvp_api/admin — fetch all RSVPs (auth enforced by nginx auth_request)
 app.get('/rsvp_api/admin', async (req, res) => {
-  const { password } = req.query;
-
-  if (password !== ADMIN_PASSWORD) {
-    return res.status(401).json({ error: 'Unauthorized.' });
-  }
-
   try {
     const result = await pool.query(
       `SELECT id, name, email, phone, adult_count, child_count, attending, created_at
