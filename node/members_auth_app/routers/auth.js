@@ -50,18 +50,28 @@ router.get('/callback', async (req,res) => {
 
         req.session.user = { email, authed: true };
 
-        res.redirect('/members');
+        const returnTo = req.session.returnTo;
+        delete req.session.returnTo;
+        const safeDest = (returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//'))
+            ? returnTo
+            : '/members';
+        res.redirect(safeDest);
     } catch (err) {
         console.error('Callback error:', err);
         return res.status(500).send('Account Auth Failed!')
     }
 });
 
-// uses MSAL to to request an authUrl; will then redirect use to that URL 
+// uses MSAL to to request an authUrl; will then redirect use to that URL
 router.get('/login', async (req,res) => {
     try {
+        if (req.query.returnTo) {
+            req.session.returnTo = req.query.returnTo;
+        }
         const authUrl = await msalClient.getAuthCodeUrl(authCodeURLParams);
-        res.redirect(authUrl);
+        req.session.save(() => {
+            res.redirect(authUrl);
+        });
     } catch (err) {
         console.error('Failed to get authUrl from msalClient:', err);
         res.status(500).send('Mircrosoft (MSAL) Login Failed');
