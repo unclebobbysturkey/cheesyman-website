@@ -12,6 +12,7 @@ const membersRouter = require('./routers/members');
 const requireAuth = require('./middleware/requireAuth');
 
 const app = express(); // define express object
+app.set('trust proxy', 1); // trust the first proxy (nginx) so express sees the original HTTPS protocol for secure cookies
 const PORT = process.env.PORT;
 
 const pgPool = new Pool({ connectionString: process.env.DB_URL });
