@@ -254,7 +254,7 @@ function getGameDateTime(game) {
 // Main route — assembles team info, schedule, record, and rankings into a single JSON response.
 app.get('/cfb_api/:schoolName', async (req, res) => {
     const schoolName = req.params.schoolName;
-    const year = req.query.year || 2025;
+    const year = req.query.year || 2026;
 
     const team = await getTeamData(schoolName);
     const scheduleData = await getScheduleData(schoolName, year);  // ← This returns {games, record}
