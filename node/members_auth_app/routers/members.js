@@ -4,14 +4,9 @@
 
 const express = require('express');
 const router = express.Router();
-const {
-    BlobServiceClient,
-    StorageSharedKeyCredential,
-    generateBlobSASQueryParameters,
-    BlobSASPermissions
-} = require('@azure/storage-blob');
 
 const PHOTOS_PER_PAGE = 12;
+const IMAGE_API_URL = process.env.IMAGE_API_URL || 'http://image_url_app:3007/image_api/images';
 
 // ── Shared cyberpunk CSS (inlined so the members app is self-contained) ────────
 const CYBERPUNK_CSS = `
@@ -49,19 +44,6 @@ body {
     min-height: 100vh;
     background-image: radial-gradient(circle, #1a1a3a 1px, transparent 1px);
     background-size: 28px 28px;
-}
-
-body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    background: repeating-linear-gradient(
-        to bottom,
-        transparent, transparent 3px,
-        rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 4px
-    );
-    z-index: 9999;
 }
 
 .neon-bar {
@@ -237,39 +219,15 @@ router.get('/', (req, res) => {
 router.get('/gallery', async (req, res) => {
     try {
         const page = Math.max(1, parseInt(req.query.page) || 1);
-        const accountName   = process.env.AZURE_STORAGE_ACCOUNT_NAME;
-        const accountKey    = process.env.AZURE_STORAGE_ACCOUNT_KEY;
-        const containerName = process.env.BLOB_CONTAINER_NAME;
 
-        const credential = new StorageSharedKeyCredential(accountName, accountKey);
-        const containerClient = new BlobServiceClient(
-            `https://${accountName}.blob.core.windows.net`,
-            credential
-        ).getContainerClient(containerName);
+        // Fetch all presigned URLs from the image API
+        const response = await fetch(IMAGE_API_URL);
+        if (!response.ok) throw new Error(`Image API returned ${response.status}`);
+        const allUrls = await response.json();
 
-        // List all .jpg blobs and sort alphabetically
-        const allBlobs = [];
-        for await (const blob of containerClient.listBlobsFlat()) {
-            if (/\.(jpg|jpeg)$/i.test(blob.name)) allBlobs.push(blob.name);
-        }
-        allBlobs.sort();
-
-        const totalPages = Math.ceil(allBlobs.length / PHOTOS_PER_PAGE) || 1;
+        const totalPages = Math.ceil(allUrls.length / PHOTOS_PER_PAGE) || 1;
         const safePage   = Math.min(page, totalPages);
-        const pageBlobs  = allBlobs.slice((safePage - 1) * PHOTOS_PER_PAGE, safePage * PHOTOS_PER_PAGE);
-
-        // Generate SAS URLs valid for 1 hour for current page only
-        const startsOn  = new Date();
-        const expiresOn = new Date(Date.now() + 60 * 60 * 1000);
-
-        const photos = pageBlobs.map(blobName => {
-            const sasToken = generateBlobSASQueryParameters({
-                containerName, blobName,
-                permissions: BlobSASPermissions.parse('r'),
-                startsOn, expiresOn
-            }, credential).toString();
-            return `https://${accountName}.blob.core.windows.net/${containerName}/${encodeURIComponent(blobName)}?${sasToken}`;
-        });
+        const photos     = allUrls.slice((safePage - 1) * PHOTOS_PER_PAGE, safePage * PHOTOS_PER_PAGE);
 
         res.send(galleryHtml(photos, safePage, totalPages));
     } catch (err) {
