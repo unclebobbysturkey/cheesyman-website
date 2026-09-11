@@ -89,9 +89,13 @@ services:
       - /app/node_modules
     depends_on:
       - db
+      - image_url_app
+    ports:
+      - "3005:3005"
     environment:
-      - NODE_ENV=PROD
+      - NODE_ENV=development
       - PORT=${members_auth_app_PORT}
+      - IMAGE_API_URL=http://image_url_app:3007/image_api/images
 
   rsvp_app:
     build: /home/webmaster/website/node/rsvp_app
