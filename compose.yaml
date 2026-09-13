@@ -93,7 +93,7 @@ services:
     ports:
       - "3005:3005"
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=PROD
       - PORT=${members_auth_app_PORT}
       - IMAGE_API_URL=http://image_url_app:3007/image_api/images
 
@@ -131,6 +131,17 @@ services:
       - R2_ACCESS_KEY_ID=${R2_ACCESS_KEY_ID}
       - R2_SECRET_ACCESS_KEY=${R2_SECRET_ACCESS_KEY}
       - R2_BUCKET_NAME=${R2_BUCKET_NAME}
+  
+  # Rankings app — serves poll rankings for CFB and CBB.
+  # Route: GET /rankings_api/rankings?sport=cfb&year=&week=  |  Port 3008
+  rankings_app:
+    build: /home/webmaster/website/node/rankings_app
+    volumes:
+      - /home/webmaster/website/node/rankings_app:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=PROD
+      - PORT=${rankings_app_PORT}
 
   # PostgreSQL database — stores racing data.
   # Init scripts in /home/webmaster/website/init/ run once on first startup (schema, seed data).
