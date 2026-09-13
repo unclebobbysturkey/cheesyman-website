@@ -182,23 +182,26 @@ async function getRanking (team, year) {
                 poll.poll.toLowerCase() === desiredPoll.toLowerCase()
             );
 
+            if (!pollRankings) return null;
+
             let rankData = pollRankings.ranks.find(rank =>
                 rank.teamId === teamId
             );
 
             if (!rankData) {
-                rankData = null;
-                return rankData;
+                return null;
             }
 
             return rankData.rank;
         }
         const coachesRank = getPollRank('Coaches Poll');
         const aptop25Rank = getPollRank('AP Top 25');
+        const fcsCoachesRank = getPollRank('FCS Coaches Poll');
 
         return {
             CoachesRank: coachesRank,
-            APTop25Rank: aptop25Rank
+            APTop25Rank: aptop25Rank,
+            FCSCoachesRank: fcsCoachesRank
         };
 
     } catch (error) {
