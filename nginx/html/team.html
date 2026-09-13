@@ -196,8 +196,10 @@
                     <div class="schedule">
                         <h2>${teamData.games[0].season} Schedule</h2>
                         <p><strong>Current Record:</strong> ${teamData.currentRecord}</p>
-                        <p><strong>Coaches Poll:</strong> ${teamData.currentRank.CoachesRank !== null ? `#${teamData.currentRank.CoachesRank}` : 'Not Ranked'}</p>
-                        <p><strong>AP Top 25 Poll:</strong> ${teamData.currentRank.APTop25Rank !== null ? `#${teamData.currentRank.APTop25Rank}` : 'Not Ranked'}</p>
+                        ${teamData.currentRank.APTop25Rank !== null ? `<p><strong>AP Top 25 Poll:</strong> #${teamData.currentRank.APTop25Rank}</p>` : ''}
+                        ${teamData.currentRank.CoachesRank !== null ? `<p><strong>Coaches Poll:</strong> #${teamData.currentRank.CoachesRank}</p>` : ''}
+                        ${teamData.currentRank.FCSCoachesRank !== null ? `<p><strong>FCS Coaches Poll:</strong> #${teamData.currentRank.FCSCoachesRank}</p>` : ''}
+                        ${teamData.currentRank.APTop25Rank === null && teamData.currentRank.CoachesRank === null && teamData.currentRank.FCSCoachesRank === null ? `<p><strong>Rankings:</strong> Not Ranked</p>` : ''}
                         ${teamData.games.map(game => {
                             const gameScore = (game.homePoints === null) ? '--' : `${game.homePoints} - ${game.awayPoints}`;
                             let result;
