@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0J8DVETW8G"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0J8DVETW8G');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>League Teams - Cheesy Sports</title>
+    <link rel="stylesheet" href="cyberpunk.css">
+    <style>
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            max-width: 900px;
+            margin: 20px auto 0;
+        }
+
+        .team-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 16px 12px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text);
+            position: relative;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .team-card:hover {
+            border-color: var(--blue);
+            box-shadow: 0 0 12px var(--blue-glow);
+        }
+        .team-card::before, .team-card::after {
+            content: '';
+            position: absolute;
+            width: 10px; height: 10px;
+            border-style: solid;
+        }
+        .team-card::before { top:-1px; left:-1px; border-width:2px 0 0 2px; border-color:var(--blue); }
+        .team-card::after  { bottom:-1px; right:-1px; border-width:0 2px 2px 0; border-color:var(--blue); }
+
+        .team-card img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 10px;
+            filter: drop-shadow(0 0 8px var(--blue-glow));
+        }
+
+        .team-card .team-name {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-dim);
+            letter-spacing: 0.04em;
+            line-height: 1.4;
+        }
+
+        .no-badge {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            border: 1px dashed var(--border);
+            border-radius: 2px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-dim);
+        }
+    </style>
+</head>
+<body>
+    <div class="neon-bar"></div>
+
+    <header class="page-header">
+        <div class="header-nav">
+            <a href="leagues.html"    class="btn btn-amber">Back to Leagues</a>
+            <a href="cheesyhome.html" class="btn btn-green">Cheesyman Home</a>
+        </div>
+        <div class="header-kicker">cheesyman.com // sports // calcio</div>
+        <h1 id="league-title">LEAGUE TEAMS</h1>
+    </header>
+
+    <main class="page-wrap" style="padding-top:20px;">
+
+        <div class="section-label" style="max-width:600px; margin:0 auto 20px; text-align:center;">teams</div>
+
+        <div id="teams-content">
+            <div class="loading">Loading teams...</div>
+        </div>
+
+    </main>
+
+    <footer class="page-footer">
+        &copy; <span id="currentYear"></span> Cheesyman Inc. All rights reserved.
+    </footer>
+
+    <script>
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const leagueId = urlParams.get('leagueId');
+        const leagueName = urlParams.get('leagueName') || 'League';
+
+        document.getElementById('league-title').textContent = decodeURIComponent(leagueName).toUpperCase();
+        document.querySelector('title').textContent = `${decodeURIComponent(leagueName)} - Cheesy Sports`;
+
+        if (leagueId) {
+            loadTeams(leagueId);
+        } else {
+            document.getElementById('teams-content').innerHTML =
+                '<div class="error">No league specified. Please go back and select a league.</div>';
+        }
+
+        async function loadTeams(leagueId) {
+            try {
+                const response = await fetch(`/calcio_api/teams/${leagueId}`);
+                if (!response.ok) throw new Error(`API returned ${response.status}`);
+                const teams = await response.json();
+
+                if (!teams || teams.length === 0) {
+                    document.getElementById('teams-content').innerHTML =
+                        '<div class="error">No teams found for this league.</div>';
+                    return;
+                }
+
+                document.getElementById('teams-content').innerHTML = `
+                    <div class="team-grid">
+                        ${teams.map(team => {
+                            const badge = team.strBadge
+                                ? `<img src="${team.strBadge}" alt="${team.strTeam}" loading="lazy">`
+                                : `<div class="no-badge">No Badge</div>`;
+                            return `
+                                <a href="league_team.html?teamId=${team.idTeam}&teamName=${encodeURIComponent(team.strTeam)}&leagueId=${leagueId}&leagueName=${encodeURIComponent(leagueName)}"
+                                   class="team-card">
+                                    ${badge}
+                                    <div class="team-name">${team.strTeam}</div>
+                                </a>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading teams:', error);
+                document.getElementById('teams-content').innerHTML = `
+                    <div class="error">
+                        <strong>Unable to Load Teams</strong><br>
+                        <small>${error.message}</small>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

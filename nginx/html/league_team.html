@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0J8DVETW8G"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0J8DVETW8G');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Info - Cheesy Sports</title>
+    <link rel="stylesheet" href="cyberpunk.css">
+    <style>
+        #team-content h1 {
+            font-family: var(--font-display);
+            font-size: clamp(20px, 4vw, 36px);
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 0.06em;
+            text-shadow: 0 0 10px #fff, 0 0 30px var(--blue), 0 0 60px var(--blue-glow);
+            margin: 28px 0 8px;
+            text-align: center;
+        }
+
+        .team-logo {
+            max-width: 180px;
+            height: auto;
+            margin: 16px auto 24px;
+            display: block;
+            filter: drop-shadow(0 0 14px var(--blue-glow));
+        }
+
+        .no-badge-large {
+            width: 180px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 16px auto 24px;
+            border: 1px dashed var(--border);
+            border-radius: 2px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        .team-info {
+            background: var(--surface);
+            border: 1px solid var(--blue);
+            border-radius: 2px;
+            padding: 20px 24px;
+            margin: 16px auto;
+            max-width: 800px;
+            position: relative;
+            text-align: left;
+            box-shadow: 0 0 12px var(--blue-glow);
+        }
+
+        .team-info::before, .team-info::after {
+            content: '';
+            position: absolute;
+            width: 12px; height: 12px;
+            border-style: solid;
+        }
+        .team-info::before { top:-1px; left:-1px; border-width:2px 0 0 2px; border-color:var(--blue); }
+        .team-info::after  { bottom:-1px; right:-1px; border-width:0 2px 2px 0; border-color:var(--blue); }
+
+        .team-info p {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--text-dim);
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+            line-height: 1.5;
+        }
+        .team-info p:last-child { border-bottom: none; }
+        .team-info p strong { color: var(--text); font-weight: 400; }
+
+        .team-description {
+            background: var(--surface);
+            border: 1px solid var(--orange);
+            border-radius: 2px;
+            padding: 20px 24px;
+            margin: 16px auto;
+            max-width: 800px;
+            position: relative;
+            text-align: left;
+            box-shadow: 0 0 12px var(--orange-glow);
+        }
+        .team-description::before, .team-description::after {
+            content: '';
+            position: absolute;
+            width: 12px; height: 12px;
+            border-style: solid;
+        }
+        .team-description::before { top:-1px; left:-1px; border-width:2px 0 0 2px; border-color:var(--orange); }
+        .team-description::after  { bottom:-1px; right:-1px; border-width:0 2px 2px 0; border-color:var(--orange); }
+
+        .team-description h2 {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.06em;
+            margin: 0 0 12px;
+        }
+        .team-description p {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-dim);
+            line-height: 1.7;
+        }
+
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        .social-links a {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--green);
+            text-decoration: none;
+            text-shadow: 0 0 6px var(--green);
+            letter-spacing: 0.08em;
+            padding: 6px 14px;
+            border: 1px solid var(--green);
+            border-radius: 2px;
+            transition: opacity 0.15s;
+        }
+        .social-links a:hover { opacity: 0.7; }
+
+        .form-row {
+            max-width: 800px;
+            margin: 16px auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+        }
+        .form-label {
+            color: var(--text-dim);
+            letter-spacing: 0.08em;
+        }
+        .form-badges {
+            display: flex;
+            gap: 6px;
+        }
+        .form-badge {
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            border-radius: 2px;
+            letter-spacing: 0;
+        }
+        .form-W { background: var(--green); color: #000; }
+        .form-L { background: #ff4444; color: #000; }
+        .form-D { background: #555; color: #fff; }
+
+        .schedule-section {
+            max-width: 800px;
+            margin: 24px auto;
+        }
+
+        .schedule-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 0;
+        }
+        .schedule-tab {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            padding: 8px 20px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-bottom: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+        .schedule-tab.active {
+            background: var(--surface);
+            color: var(--blue);
+            border-color: var(--blue);
+        }
+        .schedule-tab:not(.active):hover {
+            color: var(--text);
+        }
+
+        .schedule-table-wrap {
+            background: var(--surface);
+            border: 1px solid var(--blue);
+            border-radius: 0 2px 2px 2px;
+            overflow-x: auto;
+            box-shadow: 0 0 12px var(--blue-glow);
+            position: relative;
+        }
+        .schedule-table-wrap::before, .schedule-table-wrap::after {
+            content: '';
+            position: absolute;
+            width: 12px; height: 12px;
+            border-style: solid;
+        }
+        .schedule-table-wrap::before { top:-1px; left:-1px; border-width:2px 0 0 2px; border-color:var(--blue); }
+        .schedule-table-wrap::after  { bottom:-1px; right:-1px; border-width:0 2px 2px 0; border-color:var(--blue); }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--font-mono);
+            font-size: 12px;
+        }
+        .schedule-table th {
+            text-align: left;
+            color: var(--blue);
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        .schedule-table td {
+            color: var(--text-dim);
+            padding: 8px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .schedule-table tr:last-child td { border-bottom: none; }
+        .schedule-team-link { color: var(--blue); text-decoration: none; }
+        .schedule-team-link:hover { text-decoration: underline; opacity: 0.8; }
+        .schedule-table .score { font-weight: 700; }
+        .schedule-table .score-win { color: var(--green); }
+        .schedule-table .score-loss { color: #ff4444; }
+        .schedule-table .score-draw { color: #fff; }
+        .schedule-table .team-badge-sm { width: 20px; height: 20px; vertical-align: middle; margin-right: 6px; }
+        .schedule-table .vs-label { color: var(--text-dim); font-size: 11px; }
+        .schedule-empty {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-dim);
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="neon-bar"></div>
+
+    <header class="page-header">
+        <div class="header-nav">
+            <a id="back-link" href="leagues.html" class="btn btn-amber">Back to League</a>
+            <a href="cheesyhome.html" class="btn btn-green">Cheesyman Home</a>
+        </div>
+        <div class="header-kicker">cheesyman.com // sports // calcio</div>
+        <h1>TEAM INFO</h1>
+    </header>
+
+    <main class="page-wrap" style="padding-top:20px;">
+        <div id="team-content">
+            <div class="loading">Loading team information...</div>
+        </div>
+    </main>
+
+    <footer class="page-footer">
+        &copy; <span id="currentYear"></span> Cheesyman Inc. All rights reserved.
+    </footer>
+
+    <script>
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const teamId = urlParams.get('teamId');
+        const leagueId = urlParams.get('leagueId');
+        const leagueName = urlParams.get('leagueName');
+
+        // Set back link to preserve league context
+        if (leagueId && leagueName) {
+            document.getElementById('back-link').href =
+                `league_teams.html?leagueId=${leagueId}&leagueName=${encodeURIComponent(leagueName)}`;
+        }
+
+        if (teamId) {
+            loadTeam(teamId);
+        } else {
+            document.getElementById('team-content').innerHTML =
+                '<div class="error">No team specified. Please go back and select a team.</div>';
+        }
+
+        async function loadTeam(teamId) {
+            try {
+                const response = await fetch(`/calcio_api/team/${teamId}`);
+                if (!response.ok) throw new Error(`API returned ${response.status}`);
+                const team = await response.json();
+
+                document.querySelector('title').textContent = `${team.strTeam} - Cheesy Sports`;
+
+                const badge = team.strBadge
+                    ? `<img src="${team.strBadge}" alt="${team.strTeam}" class="team-logo">`
+                    : `<div class="no-badge-large">No Badge Available</div>`;
+
+                const description = team.strDescriptionEN
+                    ? `<div class="team-description">
+                           <h2>About</h2>
+                           <p>${team.strDescriptionEN}</p>
+                       </div>`
+                    : '';
+
+                // Build social links from available data
+                const links = [];
+                if (team.strWebsite) links.push(`<a href="https://${team.strWebsite}" target="_blank" rel="noopener">Website</a>`);
+                if (team.strFacebook) links.push(`<a href="https://${team.strFacebook}" target="_blank" rel="noopener">Facebook</a>`);
+                if (team.strTwitter) links.push(`<a href="https://${team.strTwitter}" target="_blank" rel="noopener">Twitter</a>`);
+                if (team.strInstagram) links.push(`<a href="https://instagram.com/${team.strInstagram}" target="_blank" rel="noopener">Instagram</a>`);
+                const socialHTML = links.length > 0
+                    ? `<div class="social-links">${links.join('')}</div>`
+                    : '';
+
+                document.getElementById('team-content').innerHTML = `
+                    <h1>${team.strTeam}</h1>
+                    ${badge}
+                    <div class="team-info">
+                        <p><strong>League:</strong> ${team.strLeague || 'N/A'}</p>
+                        <p><strong>Country:</strong> ${team.strCountry || 'N/A'}</p>
+                        <p><strong>Founded:</strong> ${team.intFormedYear || 'N/A'}</p>
+                        <p><strong>Stadium:</strong> ${team.strStadium || 'N/A'}</p>
+                        <p><strong>Stadium Location:</strong> ${team.strLocation || 'N/A'}</p>
+                        <p><strong>Capacity:</strong> ${team.intStadiumCapacity ? Number(team.intStadiumCapacity).toLocaleString() : 'N/A'}</p>
+                    </div>
+                    <div id="form-row" class="form-row" style="display:none;"></div>
+                    <div class="schedule-section">
+                        <div class="schedule-tabs">
+                            <button class="schedule-tab active" data-tab="upcoming" onclick="switchTab('upcoming')">UPCOMING</button>
+                            <button class="schedule-tab" data-tab="results" onclick="switchTab('results')">RECENT RESULTS</button>
+                        </div>
+                        <div class="schedule-table-wrap">
+                            <div id="schedule-upcoming" class="schedule-panel">
+                                <div class="schedule-empty">Loading upcoming matches...</div>
+                            </div>
+                            <div id="schedule-results" class="schedule-panel" style="display:none;">
+                                <div class="schedule-empty">Loading recent results...</div>
+                            </div>
+                        </div>
+                    </div>
+                    ${description}
+                    ${socialHTML}
+                `;
+
+                loadSchedule(teamId, team.idTeam);
+            } catch (error) {
+                console.error('Error loading team:', error);
+                document.getElementById('team-content').innerHTML = `
+                    <div class="error">
+                        <strong>Unable to Load Team Data</strong><br>
+                        <small>${error.message}</small>
+                    </div>
+                `;
+            }
+        }
+        function switchTab(tab) {
+            document.querySelectorAll('.schedule-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.schedule-tab[data-tab="${tab}"]`).classList.add('active');
+            document.querySelectorAll('.schedule-panel').forEach(p => p.style.display = 'none');
+            document.getElementById(tab === 'upcoming' ? 'schedule-upcoming' : 'schedule-results').style.display = '';
+        }
+
+        async function loadSchedule(teamId, selectedTeamId) {
+            const [nextRes, lastRes] = await Promise.allSettled([
+                fetch(`/calcio_api/schedule/next/${teamId}`).then(r => r.ok ? r.json() : []),
+                fetch(`/calcio_api/schedule/last/${teamId}`).then(r => r.ok ? r.json() : [])
+            ]);
+
+            const upcoming = nextRes.status === 'fulfilled' ? nextRes.value : [];
+            const results = lastRes.status === 'fulfilled' ? lastRes.value : [];
+
+            document.getElementById('schedule-upcoming').innerHTML = upcoming.length
+                ? renderScheduleTable(upcoming, false, selectedTeamId)
+                : '<div class="schedule-empty">No upcoming matches found.</div>';
+
+            document.getElementById('schedule-results').innerHTML = results.length
+                ? renderScheduleTable(results, true, selectedTeamId)
+                : '<div class="schedule-empty">No recent results found.</div>';
+
+            if (results.length) {
+                const last5 = results.slice(0, 5).map(e => {
+                    if (e.intHomeScore == null || e.intAwayScore == null) return null;
+                    const homeScore = Number(e.intHomeScore);
+                    const awayScore = Number(e.intAwayScore);
+                    const isHome = e.idHomeTeam === selectedTeamId;
+                    if (homeScore === awayScore) return 'D';
+                    if ((isHome && homeScore > awayScore) || (!isHome && awayScore > homeScore)) return 'W';
+                    return 'L';
+                }).filter(r => r !== null);
+
+                if (last5.length) {
+                    const formEl = document.getElementById('form-row');
+                    formEl.innerHTML = `<span class="form-label">FORM:</span>
+                        <div class="form-badges">${last5.map(r => `<span class="form-badge form-${r}">${r}</span>`).join('')}</div>`;
+                    formEl.style.display = '';
+                }
+            }
+        }
+
+        function renderScheduleTable(events, showScores, selectedTeamId) {
+            const rows = events.map(e => {
+                const date = e.dateEvent || 'TBD';
+                const time = e.strTime ? e.strTime.substring(0, 5) : '';
+                const home = e.strHomeTeam || '';
+                const away = e.strAwayTeam || '';
+                const homeBadge = e.strHomeTeamBadge ? `<img src="${e.strHomeTeamBadge}" class="team-badge-sm" alt="">` : '';
+                const awayBadge = e.strAwayTeamBadge ? `<img src="${e.strAwayTeamBadge}" class="team-badge-sm" alt="">` : '';
+                const venue = e.strVenue || '';
+
+                const homeIsSelected = e.idHomeTeam === selectedTeamId;
+                const teamLink = (id, name) => `<a href="league_team.html?teamId=${id}&leagueId=${leagueId}&leagueName=${encodeURIComponent(leagueName || '')}" class="schedule-team-link">${name}</a>`;
+                const homeLabel = homeIsSelected ? home : teamLink(e.idHomeTeam, home);
+                const awayLabel = !homeIsSelected ? away : teamLink(e.idAwayTeam, away);
+
+                let scoreCol = '';
+                if (showScores) {
+                    const hs = e.intHomeScore != null ? e.intHomeScore : '-';
+                    const as = e.intAwayScore != null ? e.intAwayScore : '-';
+                    let scoreClass = 'score';
+                    if (e.intHomeScore != null && e.intAwayScore != null) {
+                        const isHome = homeIsSelected;
+                        const homeScore = Number(e.intHomeScore);
+                        const awayScore = Number(e.intAwayScore);
+                        if (homeScore === awayScore) {
+                            scoreClass += ' score-draw';
+                        } else if ((isHome && homeScore > awayScore) || (!isHome && awayScore > homeScore)) {
+                            scoreClass += ' score-win';
+                        } else {
+                            scoreClass += ' score-loss';
+                        }
+                    }
+                    scoreCol = `<td class="${scoreClass}">${hs} - ${as}</td>`;
+                } else {
+                    scoreCol = `<td>${time}</td>`;
+                }
+
+                return `<tr>
+                    <td>${date}</td>
+                    <td>${homeBadge}${homeLabel}</td>
+                    <td class="vs-label">vs</td>
+                    <td>${awayBadge}${awayLabel}</td>
+                    ${scoreCol}
+                    <td>${venue}</td>
+                </tr>`;
+            }).join('');
+
+            return `<table class="schedule-table">
+                <thead><tr>
+                    <th>DATE</th><th>HOME</th><th></th><th>AWAY</th>
+                    <th>${showScores ? 'SCORE' : 'TIME'}</th><th>VENUE</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>`;
+        }
+    </script>
+</body>
+</html>

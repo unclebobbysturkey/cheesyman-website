@@ -118,6 +118,9 @@
         }
         .box-score td { color: var(--text); }
         .box-score tr:nth-child(even) td { background: var(--surface2); }
+
+        .opponent-link { color: var(--blue); text-decoration: none; }
+        .opponent-link:hover { text-decoration: underline; opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -186,9 +189,12 @@
                             } else { result = '--'; }
                             let venue = game.venue === null ? 'N/A' : game.venue;
                             let location = game.city === null ? 'N/A' : `${game.city}, ${game.state}`;
+                            const homeIsSelected = game.homeTeam.toLowerCase() === teamData.team.school.toLowerCase();
+                            const homeLabel = homeIsSelected ? game.homeTeam : `<a href="cbbteam.html?team=${encodeURIComponent(game.homeTeam)}&year=${game.season}" class="opponent-link">${game.homeTeam}</a>`;
+                            const awayLabel = !homeIsSelected ? game.awayTeam : `<a href="cbbteam.html?team=${encodeURIComponent(game.awayTeam)}&year=${game.season}" class="opponent-link">${game.awayTeam}</a>`;
                             return `
                             <div class="game">
-                                <p><strong>${game.homeTeam} vs ${game.awayTeam}</strong></p>
+                                <p><strong>${homeLabel} vs ${awayLabel}</strong></p>
                                 <p><strong>Date:</strong> ${game.formatedDate}</p>
                                 <p><strong>Venue:</strong> ${venue}</p>
                                 <p><strong>Location:</strong> ${location}</p>

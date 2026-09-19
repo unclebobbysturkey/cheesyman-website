@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0J8DVETW8G"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0J8DVETW8G');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soccer Leagues - Cheesy Sports</title>
+    <link rel="stylesheet" href="cyberpunk.css">
+    <style>
+        .league-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            max-width: 900px;
+            margin: 20px auto 0;
+        }
+
+        .league-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 16px 12px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text);
+            position: relative;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .league-card:hover {
+            border-color: var(--blue);
+            box-shadow: 0 0 12px var(--blue-glow);
+        }
+        .league-card::before, .league-card::after {
+            content: '';
+            position: absolute;
+            width: 10px; height: 10px;
+            border-style: solid;
+        }
+        .league-card::before { top:-1px; left:-1px; border-width:2px 0 0 2px; border-color:var(--blue); }
+        .league-card::after  { bottom:-1px; right:-1px; border-width:0 2px 2px 0; border-color:var(--blue); }
+
+        .league-card .league-flag {
+            font-size: 48px;
+            display: block;
+            margin: 0 auto 10px;
+            line-height: 1;
+        }
+
+        .league-card .league-name {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-dim);
+            letter-spacing: 0.04em;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="neon-bar"></div>
+
+    <header class="page-header">
+        <div class="header-nav">
+            <a href="sports.html"     class="btn btn-amber">Back to Sports</a>
+            <a href="cheesyhome.html" class="btn btn-green">Cheesyman Home</a>
+        </div>
+        <div class="header-kicker">cheesyman.com // sports // calcio</div>
+        <h1>SOCCER / CALCIO</h1>
+        <p class="header-sub">Browse leagues and teams from around the world.</p>
+    </header>
+
+    <main class="page-wrap" style="text-align:center; padding-top:40px;">
+
+        <div class="section-label" style="max-width:600px; margin:0 auto 20px;">select a league</div>
+
+        <div id="leagues-content">
+            <div class="loading">Loading leagues...</div>
+        </div>
+
+    </main>
+
+    <footer class="page-footer">
+        &copy; <span id="currentYear"></span> Cheesyman Inc. All rights reserved.
+    </footer>
+
+    <script>
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+        async function loadLeagues() {
+            try {
+                const response = await fetch('/calcio_api/leagues');
+                if (!response.ok) throw new Error(`API returned ${response.status}`);
+                const leagues = await response.json();
+
+                document.getElementById('leagues-content').innerHTML = `
+                    <div class="league-grid">
+                        ${leagues.map(league => `
+                            <a href="league_teams.html?leagueId=${league.idLeague}&leagueName=${encodeURIComponent(league.strLeague)}"
+                               class="league-card">
+                                <span class="league-flag">${league.flag}</span>
+                                <div class="league-name">${league.strLeague}</div>
+                            </a>
+                        `).join('')}
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading leagues:', error);
+                document.getElementById('leagues-content').innerHTML = `
+                    <div class="error">
+                        <strong>Unable to Load Leagues</strong><br>
+                        <small>${error.message}</small>
+                    </div>
+                `;
+            }
+        }
+
+        loadLeagues();
+    </script>
+</body>
+</html>

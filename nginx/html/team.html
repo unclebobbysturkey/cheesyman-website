@@ -133,6 +133,9 @@
         }
         .matchup-link:hover { opacity: 0.75; }
         .matchup-link::before { content: '> '; }
+
+        .opponent-link { color: var(--blue); text-decoration: none; }
+        .opponent-link:hover { text-decoration: underline; opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -208,10 +211,13 @@
                                 result = winner.toLowerCase() === teamData.team.school.toLowerCase() ? 'Win' : 'Loss';
                             } else { result = '--'; }
                             let venue = game.venue === null ? 'N/A' : game.venue;
+                            const homeIsSelected = game.homeTeam.toLowerCase() === teamData.team.school.toLowerCase();
+                            const homeLabel = homeIsSelected ? game.homeTeam : `<a href="team.html?team=${encodeURIComponent(game.homeTeam)}&year=${game.season}" class="opponent-link">${game.homeTeam}</a>`;
+                            const awayLabel = !homeIsSelected ? game.awayTeam : `<a href="team.html?team=${encodeURIComponent(game.awayTeam)}&year=${game.season}" class="opponent-link">${game.awayTeam}</a>`;
                             return `
                             <div class="game">
                                 <p><strong>${game.seasonType === 'regular' ? `Week ${game.week}` : `Postseason Week ${game.week}`}</strong></p>
-                                <p><strong>${game.homeTeam} vs ${game.awayTeam}</strong></p>
+                                <p><strong>${homeLabel} vs ${awayLabel}</strong></p>
                                 <p><strong>Date:</strong> ${game.formatedDate} @ ${game.formatedTime}</p>
                                 <p><strong>Venue:</strong> ${venue}</p>
                                 <p><strong>Score:</strong> ${gameScore}</p>
