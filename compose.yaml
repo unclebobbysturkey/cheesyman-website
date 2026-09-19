@@ -143,6 +143,18 @@ services:
       - NODE_ENV=PROD
       - PORT=${rankings_app_PORT}
 
+  # Calcio (soccer) app — proxies requests to thesportsdb.com v2 API.
+  # Routes: GET /calcio_api/leagues, /calcio_api/teams/:id, /calcio_api/team/:id  |  Port 3009
+  calcio_main_app:
+    build: /home/webmaster/website/node/calcio_main_app
+    volumes:
+      - /home/webmaster/website/node/calcio_main_app:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=PROD
+      - PORT=${calcio_main_app_PORT}
+      - X_API_KEY=${X_API_KEY}
+
   # PostgreSQL database — stores racing data.
   # Init scripts in /home/webmaster/website/init/ run once on first startup (schema, seed data).
   db:
